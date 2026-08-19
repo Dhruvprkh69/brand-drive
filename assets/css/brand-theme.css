@@ -315,15 +315,16 @@
 }
 
 .solution-section__num {
-  color: var(--color-green-muted);
+  color: var(--color-blue);
+  font-weight: 700;
 }
 
 .solution-section:nth-child(3n + 2) .solution-section__num {
-  color: var(--color-orange-muted);
+  color: var(--color-blue);
 }
 
 .solution-section:nth-child(3n) .solution-section__num {
-  color: var(--color-blue-muted);
+  color: var(--color-blue);
 }
 
 .benefit-tags span {
@@ -378,7 +379,7 @@
 }
 
 .industry-detail__label {
-  color: var(--color-green-dark);
+  color: var(--color-blue);
 }
 
 .detail-list ul li::before {

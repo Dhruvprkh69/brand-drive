@@ -76,7 +76,7 @@
       { id: 'about-preview', getLink: () => navList.querySelector('a[href="about.html"]:not([href*="#"])') },
       { id: 'industries', getLink: () => navList.querySelector('a[href*="industries.html"].nav__link--dropdown') },
       { id: 'solutions', getLink: () => navList.querySelector('a[href*="solutions.html"].nav__link--dropdown') },
-      { id: 'process', getLink: () => navList.querySelector('a[href="about.html#why"]') },
+      { id: 'process', getLink: () => navList.querySelector('a[href="why.html"]') },
       { id: 'metrics', getLink: () => navList.querySelector('a[href="clients.html"]') },
     ];
 

@@ -773,8 +773,12 @@
     padding-block: 40px;
   }
 
+  .industry-detail__label {
+    font-size: clamp(2rem, 8vw, 2.6rem);
+  }
+
   .industry-detail__title {
-    font-size: clamp(1.5rem, 5.5vw, 1.85rem);
+    font-size: clamp(1.15rem, 4vw, 1.4rem);
   }
 
   .solution-section {

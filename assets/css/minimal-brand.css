@@ -378,7 +378,12 @@ body,
 
 /* ── Subpages ── */
 .solution-section__num {
-  color: var(--color-green-muted) !important;
+  color: var(--color-blue) !important;
+  font-weight: 700 !important;
+}
+
+.solution-section__title {
+  color: var(--color-green) !important;
 }
 
 .benefit-tags span {
@@ -388,7 +393,11 @@ body,
 }
 
 .industry-detail__label {
-  color: var(--color-green);
+  color: var(--color-blue) !important;
+}
+
+.industry-detail__title {
+  color: var(--color-green) !important;
 }
 
 .detail-list ul li::before {
