@@ -104,26 +104,31 @@
       });
     });
 
-    /* Counters — IntersectionObserver so they don't get stuck at 0 */
-    document.querySelectorAll('[data-count]').forEach((el) => {
-      const target = parseInt(el.getAttribute('data-count'), 10);
-      const suffix = el.getAttribute('data-suffix') || '';
+    /* Counters — replay count-up every time the stats row enters view */
+    const countEls = Array.from(document.querySelectorAll('[data-count]'));
+    const countRows = new Set(countEls.map((el) => el.closest('.stats-row') || el));
 
-      function finish() {
-        el.textContent = target + suffix;
-        el.dataset.counted = 'true';
+    countRows.forEach((row) => {
+      const els = Array.from(row.querySelectorAll('[data-count]'));
+      const targets = els.length ? els : [row];
+      const tweens = new Map();
+      let inView = false;
+
+      function suffixOf(el) {
+        return el.getAttribute('data-suffix') || '';
       }
 
-      function run() {
-        if (el.dataset.counted === 'true') return;
-        el.dataset.counted = 'true';
+      function showFinal(el) {
+        el.textContent = parseInt(el.getAttribute('data-count'), 10) + suffixOf(el);
+      }
 
-        if (prefersReducedMotion || typeof gsap === 'undefined') {
-          finish();
-          return;
-        }
+      function run(el) {
+        const target = parseInt(el.getAttribute('data-count'), 10);
+        const suffix = suffixOf(el);
+        const prev = tweens.get(el);
+        if (prev) prev.kill();
 
-        gsap.fromTo(
+        const tween = gsap.fromTo(
           el,
           { textContent: 0 },
           {
@@ -131,27 +136,40 @@
             duration: 1.6,
             ease: 'power2.out',
             snap: { textContent: 1 },
+            overwrite: true,
             onUpdate() {
               el.textContent = Math.round(Number(el.textContent) || 0) + suffix;
             },
-            onComplete: finish,
+            onComplete() {
+              showFinal(el);
+              tweens.delete(el);
+            },
           }
         );
+        tweens.set(el, tween);
       }
 
       const io = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            run();
-            io.disconnect();
+            if (inView) return;
+            inView = true;
+            targets.forEach(run);
+          } else {
+            inView = false;
+            targets.forEach((el) => {
+              const tween = tweens.get(el);
+              if (tween) {
+                tween.kill();
+                tweens.delete(el);
+              }
+              showFinal(el);
+            });
           }
         });
-      }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+      }, { threshold: 0.35 });
 
-      io.observe(el.closest('.stat') || el);
-      setTimeout(() => {
-        if (el.dataset.counted !== 'true') finish();
-      }, 3500);
+      io.observe(row);
     });
 
     /* Page hero */

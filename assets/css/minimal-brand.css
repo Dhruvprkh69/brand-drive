@@ -482,6 +482,30 @@ body,
   .feature-bar:hover .feature-bar__track {
     animation-play-state: paused;
   }
+
+  .header,
+  .header.is-scrolled,
+  .header--hero.is-scrolled,
+  .header:not(.header--hero).is-scrolled,
+  body.is-nav-open .header {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .nav--center,
+  .nav--center.is-open {
+    position: fixed !important;
+    inset: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    justify-self: stretch !important;
+    transform: none !important;
+  }
 }
 
 @keyframes featureBarScroll {

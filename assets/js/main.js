@@ -132,18 +132,21 @@
 
   initHomeScrollSpy();
 
+  function setMobileNavOpen(isOpen) {
+    navToggle?.classList.toggle('is-active', isOpen);
+    nav?.classList.toggle('is-open', isOpen);
+    document.body.classList.toggle('is-nav-open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
   navToggle?.addEventListener('click', () => {
-    navToggle.classList.toggle('is-active');
-    nav?.classList.toggle('is-open');
-    document.body.style.overflow = nav?.classList.contains('is-open') ? 'hidden' : '';
+    setMobileNavOpen(!nav?.classList.contains('is-open'));
   });
 
   navLinks.forEach((link) => {
     if (link.classList.contains('nav__link--dropdown')) return;
     link.addEventListener('click', () => {
-      navToggle?.classList.remove('is-active');
-      nav?.classList.remove('is-open');
-      document.body.style.overflow = '';
+      setMobileNavOpen(false);
       closeAllDropdowns();
     });
   });

@@ -46,34 +46,43 @@
   /* ── Header ── */
   .header,
   .header.is-scrolled,
+  .header--hero,
   .header--hero.is-scrolled,
-  .header:not(.header--hero).is-scrolled {
+  .header--hero:not(.is-scrolled),
+  .header:not(.header--hero).is-scrolled,
+  body.is-nav-open .header,
+  body.is-nav-open .header__inner {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
-    transform: none;
-    filter: none;
+    transform: none !important;
+    filter: none !important;
+    contain: none !important;
     overflow: visible;
   }
 
   .header__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding-inline: 16px;
     padding-left: 8px;
-    position: relative;
-    z-index: 1002;
+    overflow: visible;
   }
 
   .nav--center,
-  .header--dark .nav--center {
+  .header--dark .nav--center,
+  .nav--center.is-open {
     position: fixed !important;
+    inset: 0 !important;
     top: 0 !important;
-    left: 0 !important;
     right: 0 !important;
     bottom: 0 !important;
-    inset: auto;
-    width: 100vw !important;
+    left: 0 !important;
+    width: auto !important;
+    min-width: 100% !important;
     max-width: none !important;
-    height: 100vh !important;
-    height: 100dvh !important;
+    height: auto !important;
+    min-height: 100% !important;
     margin: 0 !important;
     padding: calc(var(--header-height) + 8px) 28px 40px;
     display: flex;
@@ -81,17 +90,21 @@
     justify-content: flex-start;
     align-items: stretch;
     justify-self: stretch !important;
+    align-self: stretch !important;
+    transform: none !important;
     background: var(--color-bg) !important;
     z-index: 1000;
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     box-sizing: border-box;
+    pointer-events: none;
   }
 
   .nav--center.is-open {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
   }
 
   .nav__list {
