@@ -454,46 +454,49 @@ body,
 
 @media (max-width: 768px) {
   .feature-bar {
-    padding-block: 16px;
-    overflow: hidden;
+    padding: 20px 0;
+    overflow: visible;
   }
 
   .feature-bar .container,
   .feature-bar__inner {
     width: 100% !important;
     max-width: none !important;
-    display: block !important;
-    grid-template-columns: none !important;
-    padding-inline: 0 !important;
-    overflow: hidden;
-  }
-
-  .feature-bar__track,
-  .feature-bar__group,
-  .feature-bar__group[aria-hidden="true"] {
-    display: flex !important;
-    align-items: center;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 18px 12px;
+    padding-inline: 16px !important;
+    overflow: visible;
   }
 
   .feature-bar__track {
-    width: max-content;
-    animation: featureBarScroll 22s linear infinite;
+    display: contents !important;
+    animation: none !important;
+    width: auto !important;
+    transform: none !important;
   }
 
   .feature-bar__group {
-    gap: 28px;
-    padding-right: 28px;
-    flex-shrink: 0;
+    display: contents !important;
+  }
+
+  .feature-bar__group[aria-hidden="true"] {
+    display: none !important;
   }
 
   .feature-bar__item {
-    flex: 0 0 auto;
-    gap: 12px;
-    white-space: nowrap;
+    flex: none;
+    gap: 10px;
+    align-items: flex-start;
+    white-space: normal;
+  }
+
+  .feature-bar__text {
+    white-space: normal;
   }
 
   .feature-bar:hover .feature-bar__track {
-    animation-play-state: paused;
+    animation: none !important;
   }
 
   .header,
