@@ -238,10 +238,11 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
+  align-items: start;
 }
 
 .value-card {
-  padding: 36px 28px;
+  padding: 28px 22px 22px;
   background: var(--color-white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
@@ -249,16 +250,20 @@
 }
 
 .value-card__icon {
-  font-size: 1.75rem;
-  color: var(--color-green);
-  margin-bottom: 16px;
+  font-size: 1.35rem;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  display: grid;
+  place-items: center;
+  color: var(--color-gold);
 }
 
 .value-card__title {
   font-family: var(--font-heading);
   font-size: 1.35rem;
-  margin-bottom: 10px;
-  color: var(--color-gold);
+  margin-bottom: 8px;
+  color: var(--color-green);
 }
 
 .value-card__text { color: var(--color-gray); font-size: 0.9rem; line-height: 1.65; }

@@ -248,6 +248,11 @@ body,
   border-radius: 50%;
 }
 
+#values .value-card__icon {
+  color: var(--color-gold) !important;
+  border-color: var(--color-gold) !important;
+}
+
 .solution-card__title,
 .why-item__title,
 .value-card__title,
@@ -256,7 +261,7 @@ body,
 }
 
 #values .value-card__title {
-  color: var(--color-gold) !important;
+  color: var(--color-green) !important;
 }
 
 .solution-card:hover .solution-card__icon {

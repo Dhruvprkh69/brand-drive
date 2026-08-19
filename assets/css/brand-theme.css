@@ -360,10 +360,10 @@
   background: linear-gradient(180deg, var(--color-white), var(--color-green-soft));
 }
 
-.value-card__icon { color: var(--color-green); }
+.value-card__icon { color: var(--color-gold); }
 .value-card:nth-child(4n + 2) .value-card__icon { color: var(--color-gold); }
-.value-card:nth-child(4n + 3) .value-card__icon { color: var(--color-blue); }
-.value-card:nth-child(4n + 4) .value-card__icon { color: var(--color-green-dark); }
+.value-card:nth-child(4n + 3) .value-card__icon { color: var(--color-gold); }
+.value-card:nth-child(4n + 4) .value-card__icon { color: var(--color-gold); }
 
 /* ── Subpages: industry detail ── */
 .industry-detail {

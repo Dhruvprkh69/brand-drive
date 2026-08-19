@@ -331,6 +331,7 @@
   #solutions .section__header,
   #process .section__header,
   #why .section__header,
+  #values .section__header,
   #success-metrics .section__header,
   #success-metrics .reveal {
     margin-bottom: 20px !important;
@@ -340,6 +341,7 @@
   #solutions .mobile-scroll-hint,
   #process .mobile-scroll-hint,
   #why .mobile-scroll-hint,
+  #values .mobile-scroll-hint,
   #success-metrics .mobile-scroll-hint {
     display: block;
   }
@@ -395,7 +397,8 @@
   .mobile-slideshow .reveal:not(.is-visible),
   .mobile-slideshow .process-step,
   .mobile-slideshow .solution-card,
-  .mobile-slideshow .why-item {
+  .mobile-slideshow .why-item,
+  .mobile-slideshow .value-card {
     opacity: 1 !important;
     visibility: visible !important;
     transform: none !important;
@@ -446,6 +449,11 @@
     grid-template-columns: unset;
   }
 
+  #values .values-grid.mobile-slideshow {
+    grid-template-columns: unset;
+    display: block;
+  }
+
   /* Unified card size — solutions swipe + slideshow cards */
   #solutions .solution-card,
   .mobile-slideshow .process-step,
@@ -461,8 +469,22 @@
     box-sizing: border-box;
   }
 
+  .mobile-slideshow .value-card {
+    flex: 0 0 min(72vw, 248px);
+    scroll-snap-align: center;
+    min-height: 0;
+    height: auto;
+    padding: 18px 16px;
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-soft);
+    box-sizing: border-box;
+  }
+
   #solutions .solution-card__icon,
-  .mobile-slideshow .process-step__num {
+  .mobile-slideshow .process-step__num,
+  .mobile-slideshow .value-card__icon {
     width: 44px;
     height: 44px;
     font-size: 1rem;
@@ -488,6 +510,17 @@
     text-align: center;
   }
 
+  .mobile-slideshow .value-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    min-height: 0;
+    height: auto;
+    padding: 18px 16px;
+  }
+
   .mobile-slideshow .process-step__num {
     margin: 0 auto 14px;
     grid-row: auto;
@@ -495,7 +528,8 @@
 
   #solutions .solution-card__title,
   .mobile-slideshow .process-step__title,
-  .mobile-slideshow .why-item__title {
+  .mobile-slideshow .why-item__title,
+  .mobile-slideshow .value-card__title {
     font-size: 1.1rem;
     margin-bottom: 8px;
     line-height: 1.25;
@@ -503,7 +537,8 @@
 
   #solutions .solution-card__text,
   .mobile-slideshow .process-step__text,
-  .mobile-slideshow .why-item__text {
+  .mobile-slideshow .why-item__text,
+  .mobile-slideshow .value-card__text {
     font-size: 0.8125rem;
     line-height: 1.55;
   }
@@ -890,8 +925,16 @@
     padding: 14px;
   }
 
+  .mobile-slideshow .value-card {
+    flex: 0 0 min(76vw, 228px);
+    min-height: 0;
+    height: auto;
+    padding: 16px 14px;
+  }
+
   #solutions .solution-card__icon,
-  .mobile-slideshow .process-step__num {
+  .mobile-slideshow .process-step__num,
+  .mobile-slideshow .value-card__icon {
     width: 40px;
     height: 40px;
     font-size: 0.9375rem;
@@ -904,13 +947,15 @@
 
   #solutions .solution-card__title,
   .mobile-slideshow .process-step__title,
-  .mobile-slideshow .why-item__title {
+  .mobile-slideshow .why-item__title,
+  .mobile-slideshow .value-card__title {
     font-size: 1.05rem;
   }
 
   #solutions .solution-card__text,
   .mobile-slideshow .process-step__text,
-  .mobile-slideshow .why-item__text {
+  .mobile-slideshow .why-item__text,
+  .mobile-slideshow .value-card__text {
     font-size: 0.78125rem;
   }
 

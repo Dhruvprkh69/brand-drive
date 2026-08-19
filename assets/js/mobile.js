@@ -55,6 +55,7 @@
 
     const secondsPerCard = container.classList.contains('process-track')
       || container.classList.contains('grid-3')
+      || container.classList.contains('values-grid')
       ? 5
       : 6;
     track.style.setProperty('--slideshow-duration', `${Math.max(items.length * secondsPerCard, 20)}s`);
