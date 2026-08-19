@@ -16,8 +16,20 @@
     return MOBILE_MQ.matches && !REDUCED_MOTION.matches;
   }
 
+  function revealSlideshowItems(root) {
+    root.querySelectorAll('.reveal').forEach((el) => {
+      el.classList.add('is-visible');
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+      el.style.visibility = 'visible';
+    });
+  }
+
   function buildSlideshow(container) {
-    if (container.querySelector('.mobile-slideshow__track')) return;
+    if (container.querySelector('.mobile-slideshow__track')) {
+      revealSlideshowItems(container);
+      return;
+    }
 
     const items = Array.from(container.children).filter((el) => !el.classList.contains('mobile-slideshow__track'));
     if (items.length < 2) return;
@@ -38,12 +50,14 @@
     track.appendChild(group1);
     track.appendChild(group2);
     container.appendChild(track);
+    container.classList.add('is-ready');
+    revealSlideshowItems(container);
 
     const secondsPerCard = container.classList.contains('process-track')
       || container.classList.contains('grid-3')
-      ? 5.5
-      : 6.5;
-    track.style.setProperty('--slideshow-duration', `${Math.max(items.length * secondsPerCard, 24)}s`);
+      ? 5
+      : 6;
+    track.style.setProperty('--slideshow-duration', `${Math.max(items.length * secondsPerCard, 20)}s`);
   }
 
   function destroySlideshow(container) {
@@ -59,6 +73,7 @@
 
     Array.from(group1.children).forEach((item) => container.appendChild(item));
     track.remove();
+    container.classList.remove('is-ready');
   }
 
   function initMobileSlideshows() {

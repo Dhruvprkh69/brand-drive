@@ -268,21 +268,22 @@
     overflow: hidden;
     scroll-snap-type: none;
     margin-inline: -16px;
-    padding: 4px 0 16px;
+    padding: 4px 16px 16px;
   }
 
-  /* Auto-running slideshow — Why Brand Drive + Success Metrics (phone only) */
   .mobile-slideshow {
     display: block;
     overflow: hidden;
     margin-inline: -16px;
-    padding: 4px 0 16px;
+    padding: 4px 16px 16px;
   }
 
   .mobile-slideshow__track {
     display: flex;
     width: max-content;
+    will-change: transform;
     animation: mobileCardSlideshow var(--slideshow-duration, 36s) linear infinite;
+    -webkit-animation: mobileCardSlideshow var(--slideshow-duration, 36s) linear infinite;
   }
 
   .mobile-slideshow__group {
@@ -292,18 +293,26 @@
     padding-right: 14px;
   }
 
-  .mobile-slideshow__group:first-child {
-    padding-left: 16px;
+  .mobile-slideshow .reveal,
+  .mobile-slideshow .reveal:not(.is-visible),
+  .mobile-slideshow .process-step,
+  .mobile-slideshow .solution-card,
+  .mobile-slideshow .why-item {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
   }
 
-  .mobile-slideshow:hover .mobile-slideshow__track,
-  .mobile-slideshow:active .mobile-slideshow__track {
-    animation-play-state: paused;
+  @media (hover: hover) {
+    .mobile-slideshow:hover .mobile-slideshow__track {
+      animation-play-state: paused;
+      -webkit-animation-play-state: paused;
+    }
   }
 
   @keyframes mobileCardSlideshow {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
   }
 
   @media (prefers-reduced-motion: reduce) {

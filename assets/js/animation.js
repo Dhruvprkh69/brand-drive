@@ -35,7 +35,8 @@
 
     /* Reveal — skip grid/card items (handled by stagger) */
     gsap.utils.toArray('.reveal').forEach((el) => {
-      if (el.matches(STAGGER_SELECTORS) || el.closest('.grid-3, .why-grid, .process-track, .values-grid')) {
+      if (el.closest('.mobile-slideshow, .grid-3, .why-grid, .process-track, .values-grid') || el.matches(STAGGER_SELECTORS)) {
+        markVisible(el);
         return;
       }
       if (el.closest('.contact-form-col, #metrics, .stats-row, .contact-map') || el.classList.contains('contact-form-col')) {
@@ -63,6 +64,10 @@
 
     /* Stagger groups — single animation per grid */
     document.querySelectorAll('.grid-3, .why-grid, .process-track, .values-grid').forEach((grid) => {
+      if (grid.classList.contains('mobile-slideshow') && window.matchMedia('(max-width: 768px)').matches) {
+        grid.querySelectorAll('.reveal, ' + STAGGER_SELECTORS).forEach(markVisible);
+        return;
+      }
       const items = grid.querySelectorAll(STAGGER_SELECTORS);
       if (!items.length) return;
 
