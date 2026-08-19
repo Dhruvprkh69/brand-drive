@@ -35,7 +35,7 @@
 
     /* Reveal — skip grid/card items (handled by stagger) */
     gsap.utils.toArray('.reveal').forEach((el) => {
-      if (el.closest('.mobile-slideshow, .grid-3, .why-grid, .process-track, .values-grid') || el.matches(STAGGER_SELECTORS)) {
+      if (el.closest('.mobile-slideshow, .grid-3, .why-grid, .process-track, .values-grid, .marquee-section') || el.matches(STAGGER_SELECTORS)) {
         markVisible(el);
         return;
       }

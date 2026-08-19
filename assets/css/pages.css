@@ -286,7 +286,6 @@
   height: auto;
   object-fit: contain;
   object-position: center;
-  transform: translateZ(0);
 }
 
 .logo-grid__item span {
