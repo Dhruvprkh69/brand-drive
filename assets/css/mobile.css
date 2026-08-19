@@ -43,6 +43,14 @@
     display: none !important;
   }
 
+  .whatsapp-float {
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    width: 54px;
+    height: 54px;
+    font-size: 1.65rem;
+  }
+
   /* ── Header ── */
   .header,
   .header.is-scrolled,

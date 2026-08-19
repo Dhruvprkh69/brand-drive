@@ -258,6 +258,7 @@
   font-family: var(--font-heading);
   font-size: 1.35rem;
   margin-bottom: 10px;
+  color: var(--color-gold);
 }
 
 .value-card__text { color: var(--color-gray); font-size: 0.9rem; line-height: 1.65; }

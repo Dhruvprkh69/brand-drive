@@ -255,6 +255,10 @@ body,
   color: var(--color-charcoal);
 }
 
+#values .value-card__title {
+  color: var(--color-gold) !important;
+}
+
 .solution-card:hover .solution-card__icon {
   background: var(--color-green) !important;
   color: var(--color-white) !important;
