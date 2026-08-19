@@ -1,0 +1,490 @@
+/**
+ * Brand Drive — minimal-brand.css
+ * Client reference: white canvas, brand colours as precise accents only.
+ */
+
+/* ── White canvas everywhere ── */
+body,
+.section,
+.section--white,
+#about-preview,
+#solutions,
+#why,
+#process,
+#testimonials,
+.solution-section,
+.industry-detail,
+.contact-section {
+  background: var(--color-white) !important;
+}
+
+/* ── Typography accents ── */
+.section__title {
+  color: var(--color-green);
+}
+
+.section--dark .section__title {
+  color: var(--color-white);
+}
+
+.section__label {
+  color: var(--color-blue);
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.section__label::before {
+  width: 28px;
+  height: 2px;
+  background: var(--color-blue);
+}
+
+.section--dark .section__label {
+  color: var(--color-blue);
+}
+
+.section--dark .section__label::before {
+  background: var(--color-blue);
+}
+
+.section__header .section__label {
+  padding: 0;
+  background: none;
+  border-radius: 0;
+}
+
+.section__header .section__label::before {
+  display: block;
+}
+
+.marquee-section__header .section__label {
+  padding: 0;
+  background: none;
+  border-radius: 0;
+}
+
+.marquee-section__header .section__label::before {
+  display: block;
+}
+
+/* ── Header — clean white + ribbon line ── */
+.header {
+  background: var(--color-white);
+  box-shadow: none;
+}
+
+.header::after {
+  height: 3px;
+  background: var(--gradient-brand-ribbon);
+  opacity: 1;
+}
+
+.header--hero:not(.is-scrolled) {
+  background: transparent;
+  box-shadow: none;
+}
+
+.header--hero:not(.is-scrolled)::after {
+  opacity: 0;
+}
+
+.header--hero.is-scrolled,
+.header:not(.header--hero).is-scrolled {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-sm);
+}
+
+.header--hero.is-scrolled::after {
+  opacity: 1;
+}
+
+.nav__link::after {
+  background: var(--color-green);
+  height: 2px;
+}
+
+.nav__link:hover,
+.nav__link.is-active {
+  color: var(--color-green) !important;
+}
+
+/* ── Buttons — green primary, orange sparingly ── */
+.btn--primary {
+  background: var(--color-green);
+  color: var(--color-white);
+}
+
+.btn--primary:hover {
+  background: var(--color-green-deep);
+  box-shadow: var(--shadow-glow-green);
+}
+
+.btn--outline {
+  border-color: var(--color-green);
+  color: var(--color-green);
+}
+
+.btn--outline:hover {
+  background: var(--color-green);
+  border-color: var(--color-green);
+  color: var(--color-white);
+}
+
+.btn--gold {
+  background: var(--color-gold);
+  color: var(--color-white);
+}
+
+.btn--gold:hover {
+  background: #d9770b;
+  box-shadow: var(--shadow-glow-gold);
+}
+
+/* ── Hero ── */
+.hero__tag {
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: none;
+  color: var(--color-gold);
+}
+
+.hero__title {
+  color: var(--color-white);
+}
+
+.hero::after {
+  display: none;
+}
+
+/* ── Feature bar (reference-style trust strip) ── */
+.feature-bar {
+  background: var(--color-white);
+  border-block: 1px solid var(--color-border);
+  padding-block: clamp(20px, 3vw, 28px);
+  position: relative;
+  z-index: 3;
+}
+
+.feature-bar__inner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(16px, 3vw, 32px);
+}
+
+@media (min-width: 769px) {
+  .feature-bar__track,
+  .feature-bar__group {
+    display: contents;
+  }
+
+  .feature-bar__group[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+.feature-bar__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.feature-bar__icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--color-green);
+  border-radius: 50%;
+  color: var(--color-green);
+  font-size: 0.95rem;
+}
+
+.feature-bar__text {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--color-charcoal);
+}
+
+/* ── Cards — white, green icon outline only ── */
+.solution-card,
+.why-item,
+.value-card,
+.testimonial-card,
+.card {
+  background: var(--color-white) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: var(--shadow-soft);
+}
+
+.solution-card {
+  border-top: 1px solid var(--color-border) !important;
+}
+
+.solution-card::before {
+  background: var(--color-green);
+  height: 2px;
+}
+
+.solution-card:hover {
+  border-color: rgba(98, 146, 15, 0.25) !important;
+  box-shadow: var(--shadow-md);
+}
+
+.solution-card__icon,
+.value-card__icon {
+  background: transparent !important;
+  border: 2px solid var(--color-green);
+  color: var(--color-green) !important;
+  border-radius: 50%;
+}
+
+.solution-card__title,
+.why-item__title,
+.value-card__title,
+.process-step__title {
+  color: var(--color-charcoal);
+}
+
+.solution-card:hover .solution-card__icon {
+  background: var(--color-green) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-green);
+}
+
+.solution-card:nth-child(3n + 2) .solution-card__icon,
+.solution-card:nth-child(3n) .solution-card__icon {
+  background: transparent !important;
+  border-color: var(--color-green);
+  color: var(--color-green) !important;
+}
+
+.why-item__num {
+  color: var(--color-green) !important;
+}
+
+.why-item:hover {
+  border-color: rgba(98, 146, 15, 0.22) !important;
+}
+
+/* ── Process steps — green outline circles ── */
+.process-step__num {
+  border: 2px solid var(--color-green) !important;
+  color: var(--color-green) !important;
+  background: var(--color-white) !important;
+}
+
+.process-step:nth-child(5n + 2) .process-step__num,
+.process-step:nth-child(5n + 3) .process-step__num,
+.process-step:nth-child(5n + 4) .process-step__num,
+.process-step:nth-child(5n + 5) .process-step__num {
+  border-color: var(--color-green) !important;
+  color: var(--color-green) !important;
+  background: var(--color-white) !important;
+}
+
+.process-step:hover .process-step__num {
+  background: var(--color-green) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-green) !important;
+}
+
+/* ── Split / logo showcase — no card, sits on page ── */
+.split__media--logo {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0;
+}
+
+/* ── Industry cards ── */
+.industry-card {
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+}
+
+.industry-card__link {
+  color: var(--color-gold);
+}
+
+/* ── Stats — charcoal band, green numbers ── */
+.section--dark {
+  background: var(--color-charcoal) !important;
+}
+
+.section--dark .stat__number {
+  background: none !important;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  -webkit-text-fill-color: var(--color-lime) !important;
+  color: var(--color-lime) !important;
+}
+
+/* ── Testimonials ── */
+.testimonial-card::before {
+  background: var(--color-green);
+  width: 3px;
+}
+
+.swiper-pagination-bullet-active {
+  background: var(--color-green) !important;
+}
+
+/* ── Marquee ── */
+.marquee-section {
+  background: #F7F6F2;
+  border-block: 1px solid rgba(31, 37, 33, 0.08);
+}
+
+.marquee-section .marquee__item {
+  background: var(--color-white);
+  box-shadow: 0 4px 18px rgba(31, 37, 33, 0.06);
+}
+
+.marquee-section .marquee__item:hover {
+  border-color: rgba(98, 146, 15, 0.22);
+  box-shadow: 0 8px 24px rgba(31, 37, 33, 0.1);
+}
+
+/* ── Footer — charcoal, green & orange accents ── */
+.footer {
+  background: var(--color-charcoal) !important;
+  border-top: 3px solid var(--color-green);
+  border-image: none;
+}
+
+.footer__links a:hover {
+  color: var(--color-gold);
+}
+
+.footer__social a:hover {
+  background: var(--color-green);
+  border-color: var(--color-green);
+}
+
+.footer__newsletter input:focus {
+  border-color: var(--color-green);
+}
+
+/* ── Subpages ── */
+.solution-section__num {
+  color: var(--color-green-muted) !important;
+}
+
+.benefit-tags span {
+  background: var(--color-green-muted) !important;
+  color: var(--color-green) !important;
+  border: 1px solid rgba(98, 146, 15, 0.15);
+}
+
+.industry-detail__label {
+  color: var(--color-green);
+}
+
+.detail-list ul li::before {
+  background: var(--color-green) !important;
+}
+
+.logo-grid__item {
+  background: var(--color-white) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+.logo-grid__item:hover {
+  border-color: var(--color-green) !important;
+}
+
+.contact-info__icon {
+  color: var(--color-green);
+  border: 2px solid var(--color-green);
+  background: transparent;
+}
+
+.contact-map {
+  border-color: var(--color-border) !important;
+}
+
+/* ── Remove heavy textures from polish.css ── */
+.section:not(.section--dark)::before,
+.section:not(.section--dark)::after,
+#about-preview::after,
+#solutions::after,
+#why::after,
+#testimonials::after {
+  display: none !important;
+}
+
+/* ── Loader ── */
+.loader {
+  background: var(--color-white);
+}
+
+.loader__bar span {
+  background: var(--gradient-brand-ribbon);
+}
+
+@media (max-width: 992px) and (min-width: 769px) {
+  .feature-bar__inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .feature-bar {
+    padding-block: 16px;
+    overflow: hidden;
+  }
+
+  .feature-bar .container,
+  .feature-bar__inner {
+    width: 100% !important;
+    max-width: none !important;
+    display: block !important;
+    grid-template-columns: none !important;
+    padding-inline: 0 !important;
+    overflow: hidden;
+  }
+
+  .feature-bar__track,
+  .feature-bar__group,
+  .feature-bar__group[aria-hidden="true"] {
+    display: flex !important;
+    align-items: center;
+  }
+
+  .feature-bar__track {
+    width: max-content;
+    animation: featureBarScroll 22s linear infinite;
+  }
+
+  .feature-bar__group {
+    gap: 28px;
+    padding-right: 28px;
+    flex-shrink: 0;
+  }
+
+  .feature-bar__item {
+    flex: 0 0 auto;
+    gap: 12px;
+    white-space: nowrap;
+  }
+
+  .feature-bar:hover .feature-bar__track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes featureBarScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}

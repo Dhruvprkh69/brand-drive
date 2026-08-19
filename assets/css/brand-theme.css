@@ -1,0 +1,430 @@
+/**
+ * Brand Drive — brand-theme.css
+ * Applies logo palette (green · orange · blue) across the site.
+ */
+
+/* ── Global accents ── */
+.section__label::before {
+  width: 36px;
+  height: 2px;
+  background: var(--color-blue);
+}
+
+.section__label {
+  color: var(--color-blue);
+}
+
+.section--dark .section__label {
+  color: var(--color-blue);
+}
+
+.section--dark .section__label::before {
+  background: var(--color-blue);
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--gradient-brand);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* ── Section backgrounds — clean white / cream rhythm (details in polish.css) ── */
+.section--white {
+  background: var(--color-bg-white);
+}
+
+.section--dark {
+  background: var(--gradient-brand-dark);
+}
+
+/* ── Marquee — refined in polish.css ── */
+
+.marquee-section .marquee__item {
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-soft);
+}
+
+.marquee-section .marquee__item:hover {
+  border-color: rgba(244, 129, 31, 0.35);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Hero / page hero — neutral dark overlay only (no green tint) */
+.hero__overlay {
+  background: linear-gradient(105deg, rgba(12, 12, 12, 0.9) 0%, rgba(12, 12, 12, 0.72) 45%, rgba(12, 12, 12, 0.4) 100%);
+}
+
+.hero::before {
+  display: none;
+}
+
+.hero__float--1 {
+  display: none;
+}
+
+.hero__float--2 {
+  opacity: 0.1;
+}
+
+/* ── Buttons ── */
+.btn--primary {
+  background: var(--color-green);
+  color: var(--color-white);
+  box-shadow: var(--shadow-soft);
+}
+
+.btn--primary:hover {
+  background: var(--color-green-dark);
+  box-shadow: var(--shadow-hover);
+}
+
+.btn--outline:hover {
+  border-color: var(--color-green);
+  background: var(--color-green);
+  color: var(--color-white);
+}
+
+.btn--gold {
+  box-shadow: var(--shadow-soft);
+}
+
+.btn--gold:hover {
+  background: #d9770b;
+}
+
+/* ── Nav ── */
+.nav__link::after {
+  background: var(--gradient-brand);
+  height: 2px;
+}
+
+.nav__link:hover,
+.nav__link.is-active {
+  color: var(--color-green-dark);
+}
+
+/* ── Split / showcase — logo sits on page, no card ── */
+.split__media--logo {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
+
+/* Industry cards — neutral bottom fade */
+.industry-card__overlay {
+  background: linear-gradient(180deg, transparent 30%, rgba(21, 21, 21, 0.85));
+}
+
+/* ── Solution cards — rotate green · orange · blue ── */
+.solution-card {
+  border: 1px solid rgba(118, 184, 45, 0.12);
+  border-top: 3px solid var(--color-green);
+  background: linear-gradient(180deg, var(--color-white) 0%, rgba(238, 246, 228, 0.45) 100%);
+}
+
+.solution-card:nth-child(3n + 2) {
+  border-top-color: var(--color-gold);
+  background: linear-gradient(180deg, var(--color-white) 0%, rgba(254, 240, 228, 0.45) 100%);
+}
+
+.solution-card:nth-child(3n) {
+  border-top-color: var(--color-blue);
+  background: linear-gradient(180deg, var(--color-white) 0%, rgba(232, 246, 252, 0.45) 100%);
+}
+
+.solution-card__icon {
+  background: var(--color-green-muted);
+  color: var(--color-green-dark);
+}
+
+.solution-card:nth-child(3n + 2) .solution-card__icon {
+  background: var(--color-orange-muted);
+  color: var(--color-gold);
+}
+
+.solution-card:nth-child(3n) .solution-card__icon {
+  background: var(--color-blue-muted);
+  color: var(--color-blue);
+}
+
+.solution-card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* ── Process steps ── */
+.process-step__num {
+  border-color: rgba(118, 184, 45, 0.35);
+  color: var(--color-green-dark);
+  background: var(--color-green-soft);
+}
+
+.process-step:nth-child(5n + 2) .process-step__num {
+  border-color: rgba(244, 129, 31, 0.35);
+  color: var(--color-gold);
+  background: var(--color-orange-soft);
+}
+
+.process-step:nth-child(5n + 3) .process-step__num {
+  border-color: rgba(59, 177, 228, 0.35);
+  color: var(--color-blue);
+  background: var(--color-blue-soft);
+}
+
+.process-step:nth-child(5n + 4) .process-step__num {
+  border-color: rgba(118, 184, 45, 0.35);
+  color: var(--color-green);
+  background: var(--color-green-soft);
+}
+
+.process-step:nth-child(5n + 5) .process-step__num {
+  border-color: rgba(244, 129, 31, 0.35);
+  color: var(--color-gold);
+  background: var(--color-orange-soft);
+}
+
+.process-step:hover .process-step__num {
+  background: var(--color-green);
+  color: var(--color-white);
+  border-color: var(--color-green);
+}
+
+.process-step:nth-child(5n + 2):hover .process-step__num {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+.process-step:nth-child(5n + 3):hover .process-step__num {
+  background: var(--color-blue);
+  border-color: var(--color-blue);
+}
+
+/* ── Why items ── */
+.why-item {
+  border: 1px solid rgba(118, 184, 45, 0.1);
+  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-green-soft) 120%);
+}
+
+.why-item:nth-child(4n + 2) {
+  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-orange-soft) 120%);
+}
+
+.why-item:nth-child(4n + 3) {
+  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-blue-soft) 120%);
+}
+
+.why-item:nth-child(4n + 4) {
+  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-green-soft) 120%);
+}
+
+.why-item__num {
+  color: var(--color-green);
+}
+
+.why-item:nth-child(4n + 2) .why-item__num { color: var(--color-gold); }
+.why-item:nth-child(4n + 3) .why-item__num { color: var(--color-blue); }
+.why-item:nth-child(4n + 4) .why-item__num { color: var(--color-green-dark); }
+
+/* ── Stats ── */
+.section--dark .stat__number {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.section--dark .stat__label {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ── Testimonials ── */
+.testimonial-card {
+  position: relative;
+  background: var(--color-white);
+  border: 1px solid rgba(59, 177, 228, 0.15);
+  overflow: hidden;
+}
+
+.testimonial-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20px;
+  bottom: 20px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: var(--gradient-brand);
+}
+
+.swiper-pagination-bullet-active {
+  background: var(--color-gold) !important;
+}
+
+/* CTA banner — neutral overlay */
+.cta-banner__overlay {
+  background: rgba(21, 21, 21, 0.62);
+}
+
+/* ── Footer ── */
+.footer {
+  background: var(--gradient-brand-dark);
+  border-top: 3px solid transparent;
+  border-image: var(--gradient-brand) 1;
+}
+
+.footer__links a:hover {
+  color: var(--color-gold);
+}
+
+.footer__social a:hover {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+.footer__newsletter input:focus {
+  border-color: var(--color-blue);
+}
+
+/* ── Cards (general) ── */
+.card {
+  border: 1px solid rgba(118, 184, 45, 0.1);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* ── Subpages: solutions ── */
+.solution-section {
+  border-bottom-color: rgba(118, 184, 45, 0.12);
+}
+
+.solution-section:nth-child(odd) {
+  background: var(--color-bg);
+}
+
+.solution-section:nth-child(even) {
+  background: var(--color-bg-white);
+}
+
+.solution-section__num {
+  color: var(--color-green-muted);
+}
+
+.solution-section:nth-child(3n + 2) .solution-section__num {
+  color: var(--color-orange-muted);
+}
+
+.solution-section:nth-child(3n) .solution-section__num {
+  color: var(--color-blue-muted);
+}
+
+.benefit-tags span {
+  background: var(--color-green-muted);
+  color: var(--color-green-dark);
+}
+
+.solution-section:nth-child(3n + 2) .benefit-tags span {
+  background: var(--color-orange-muted);
+  color: #c06512;
+}
+
+.solution-section:nth-child(3n) .benefit-tags span {
+  background: var(--color-blue-muted);
+  color: #1a8ab8;
+}
+
+/* ── Subpages: values ── */
+.value-card {
+  border: 1px solid rgba(118, 184, 45, 0.12);
+  background: linear-gradient(180deg, var(--color-white), var(--color-green-soft));
+}
+
+.value-card:nth-child(4n + 2) {
+  background: linear-gradient(180deg, var(--color-white), var(--color-orange-soft));
+}
+
+.value-card:nth-child(4n + 3) {
+  background: linear-gradient(180deg, var(--color-white), var(--color-blue-soft));
+}
+
+.value-card:nth-child(4n + 4) {
+  background: linear-gradient(180deg, var(--color-white), var(--color-green-soft));
+}
+
+.value-card__icon { color: var(--color-green); }
+.value-card:nth-child(4n + 2) .value-card__icon { color: var(--color-gold); }
+.value-card:nth-child(4n + 3) .value-card__icon { color: var(--color-blue); }
+.value-card:nth-child(4n + 4) .value-card__icon { color: var(--color-green-dark); }
+
+/* ── Subpages: industry detail ── */
+.industry-detail {
+  border-bottom-color: rgba(118, 184, 45, 0.12);
+}
+
+.industry-detail:nth-child(odd) {
+  background: var(--color-bg);
+}
+
+.industry-detail:nth-child(even) {
+  background: var(--color-bg-white);
+}
+
+.industry-detail__label {
+  color: var(--color-green-dark);
+}
+
+.detail-list ul li::before {
+  background: var(--color-green);
+}
+
+.industry-detail:nth-child(3n + 2) .detail-list ul li::before {
+  background: var(--color-blue);
+}
+
+.industry-detail:nth-child(3n) .detail-list ul li::before {
+  background: var(--color-gold);
+}
+
+/* ── Clients page ── */
+.logo-grid__item:nth-child(3n + 2) {
+  border-color: rgba(59, 177, 228, 0.15);
+}
+
+.logo-grid__item:nth-child(3n) {
+  border-color: rgba(244, 129, 31, 0.15);
+}
+
+/* ── Contact page ── */
+.contact-section {
+  background: var(--color-bg);
+}
+
+.contact-info__item i {
+  color: var(--color-green);
+}
+
+.contact-map {
+  border: 2px solid rgba(118, 184, 45, 0.2);
+}
+
+/* Page hero — neutral overlay, no green shadow */
+.page-hero__overlay {
+  background: linear-gradient(180deg, rgba(21, 21, 21, 0.3), rgba(21, 21, 21, 0.75));
+}
+
+.page-hero__title {
+  text-shadow: none;
+}
+
+/* ── Loader bar ── */
+.loader__bar span {
+  background: var(--gradient-brand);
+}

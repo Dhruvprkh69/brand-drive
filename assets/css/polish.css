@@ -1,0 +1,412 @@
+/**
+ * Brand Drive — polish.css
+ * Portfolio-inspired visual refinement: section rhythm, textures, card elevation, hero polish.
+ */
+
+/* ── Section rhythm & texture ── */
+.section:not(.section--dark) {
+  position: relative;
+  isolation: isolate;
+}
+
+.section:not(.section--dark) > .container,
+.section:not(.section--dark) > .container--wide {
+  position: relative;
+  z-index: 1;
+}
+
+/* Subtle grid on cream sections — like portfolio hero grid */
+.section:not(.section--dark):not(.section--white)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(21, 21, 21, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(21, 21, 21, 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.45;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 72%);
+}
+
+/* Corner glow accents — brand color, very subtle */
+#about-preview::after {
+  content: '';
+  position: absolute;
+  top: -8%;
+  right: -6%;
+  width: 42%;
+  height: 55%;
+  background: radial-gradient(ellipse, rgba(244, 129, 31, 0.07) 0%, transparent 68%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#solutions::after {
+  content: '';
+  position: absolute;
+  top: -5%;
+  left: -4%;
+  width: 38%;
+  height: 50%;
+  background: radial-gradient(ellipse, rgba(59, 177, 228, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#why::after {
+  content: '';
+  position: absolute;
+  bottom: -8%;
+  right: -5%;
+  width: 40%;
+  height: 48%;
+  background: radial-gradient(ellipse, rgba(118, 184, 45, 0.07) 0%, transparent 68%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+#testimonials::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 40%;
+  background: radial-gradient(ellipse, rgba(59, 177, 228, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Section headers — centered, portfolio-style ── */
+.section__header {
+  text-align: center;
+  max-width: 680px;
+  margin-inline: auto;
+  margin-bottom: clamp(36px, 4vw, 56px);
+}
+
+.section__header .section__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 6px 16px;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  letter-spacing: 0.12em;
+  background: var(--color-green-muted);
+  color: var(--color-blue);
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.section__header .section__label::before {
+  display: none;
+}
+
+.section__header .section__subtitle {
+  margin-inline: auto;
+}
+
+.section--dark .section__header .section__label {
+  background: rgba(9, 125, 183, 0.18);
+  color: var(--color-blue);
+}
+
+/* ── Hero — transparent header + badge pill ── */
+.header--hero {
+  background: transparent;
+  box-shadow: none;
+}
+
+.header--hero::after {
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.header--hero.is-scrolled {
+  background: rgba(248, 247, 243, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-sm);
+}
+
+.header--hero.is-scrolled::after {
+  opacity: 0.9;
+}
+
+.header--hero:not(.is-scrolled) .nav__link {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.header--hero:not(.is-scrolled) .nav__link:hover,
+.header--hero:not(.is-scrolled) .nav__link.is-active {
+  color: #fff;
+}
+
+.header--hero:not(.is-scrolled) .nav__toggle span {
+  background: #fff;
+}
+
+.header--hero.is-scrolled .nav__link {
+  color: rgba(21, 21, 21, 0.75);
+}
+
+.header--hero.is-scrolled .nav__link:hover,
+.header--hero.is-scrolled .nav__link.is-active {
+  color: var(--color-dark);
+}
+
+.header--hero.is-scrolled .nav__toggle span {
+  background: var(--color-dark);
+}
+
+.header:not(.header--hero).is-scrolled {
+  background: rgba(248, 247, 243, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-sm);
+}
+
+.hero__tag {
+  display: inline-block;
+  padding: 8px 18px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--color-gold);
+  background: rgba(244, 129, 31, 0.14);
+  border: 1px solid rgba(244, 129, 31, 0.32);
+  border-radius: 100px;
+  margin-bottom: 24px;
+}
+
+.hero__title {
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* Subtle grid overlay on hero — neutral, no color tint */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.5;
+  mask-image: radial-gradient(ellipse at 30% 50%, black 0%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at 30% 50%, black 0%, transparent 75%);
+}
+
+/* ── Marquee — clean white strip ── */
+.marquee-section {
+  background: #F7F6F2;
+  border-block: 1px solid rgba(31, 37, 33, 0.08);
+  position: relative;
+}
+
+.marquee-section__header .section__label {
+  display: inline-flex;
+  padding: 6px 16px;
+  background: var(--color-green-muted);
+  border-radius: 100px;
+  letter-spacing: 0.14em;
+}
+
+.marquee-section__header .section__label::before {
+  display: none;
+}
+
+.marquee-section .marquee__item {
+  background: var(--color-bg-white);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.marquee-section .marquee__item:hover {
+  transform: translateY(-3px);
+}
+
+/* ── Split / images — elevated frames ── */
+.split__media:not(.split__media--logo) {
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--color-border-strong);
+}
+
+.split__media--logo {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0;
+}
+
+/* ── Industry cards — framed photo tiles ── */
+.industry-card {
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.industry-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* ── Solution cards — white elevated, gradient top on hover ── */
+.solution-card {
+  background: var(--color-bg-white) !important;
+  border: 1px solid var(--color-border) !important;
+  border-top: 1px solid var(--color-border) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.solution-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-brand);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+  z-index: 1;
+}
+
+.solution-card:hover::before {
+  transform: scaleX(1);
+}
+
+.solution-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: transparent !important;
+}
+
+.solution-card:nth-child(3n + 1) .solution-card__icon {
+  background: var(--color-green-muted);
+  color: var(--color-green-dark);
+}
+
+.solution-card:nth-child(3n + 2) .solution-card__icon {
+  background: var(--color-orange-muted);
+  color: var(--color-gold);
+}
+
+.solution-card:nth-child(3n) .solution-card__icon {
+  background: var(--color-blue-muted);
+  color: var(--color-blue);
+}
+
+.solution-card:hover .solution-card__icon {
+  background: var(--gradient-brand);
+  color: var(--color-white);
+}
+
+/* ── Why items — clean white cards ── */
+.why-item {
+  background: var(--color-bg-white) !important;
+  border: 1px solid var(--color-border);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.why-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(118, 184, 45, 0.2);
+}
+
+/* ── Testimonials ── */
+.testimonial-card {
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-lg);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ── CTA banner ── */
+.cta-banner {
+  box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Buttons — subtle glow on hover ── */
+.btn--primary:hover {
+  box-shadow: var(--shadow-glow-green);
+}
+
+.btn--gold:hover {
+  box-shadow: var(--shadow-glow-gold);
+}
+
+/* ── Subpages: value & logo cards ── */
+.value-card {
+  background: var(--color-bg-white) !important;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.value-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.logo-grid__item {
+  background: var(--color-bg-white) !important;
+  border: 1px solid var(--color-border) !important;
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.logo-grid__item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(118, 184, 45, 0.25) !important;
+}
+
+/* ── Contact form card ── */
+.contact-form-wrap {
+  box-shadow: var(--shadow-md);
+}
+
+.contact-info__card {
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.contact-info__card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.contact-map {
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Page hero subtle vignette ── */
+.page-hero__content .section__label {
+  display: inline-flex;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 100px;
+  letter-spacing: 0.12em;
+}
+
+.page-hero__content .section__label::before {
+  display: none;
+}

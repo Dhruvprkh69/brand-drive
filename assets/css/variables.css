@@ -1,0 +1,61 @@
+:root {
+  --color-bg: #FFFFFF;
+  --color-dark: #1F2521;
+  --color-charcoal: #1F2521;
+  --color-black: #000705;
+
+  /* Official brand palette — extracted from logo */
+  --color-green: #62920F;
+  --color-green-deep: #308704;
+  --color-green-dark: #024A01;
+  --color-lime: #B4CE06;
+  --color-blue: #097DB7;
+  --color-cyan: #04BBCE;
+  --color-gold: #F38C12;
+  --color-gray: #6B7280;
+  --color-white: #FFFFFF;
+  --color-border: rgba(31, 37, 33, 0.1);
+  --color-overlay: rgba(31, 37, 33, 0.5);
+
+  /* Minimal tints — icons & hover only, never full sections */
+  --color-green-soft: #F4F8EE;
+  --color-green-muted: rgba(98, 146, 15, 0.1);
+  --color-orange-soft: #FEF6EC;
+  --color-orange-muted: rgba(243, 140, 18, 0.1);
+  --color-blue-soft: #EDF6FA;
+  --color-blue-muted: rgba(9, 125, 183, 0.1);
+  --color-cyan-muted: rgba(4, 187, 206, 0.1);
+  --color-lime-muted: rgba(180, 206, 6, 0.12);
+
+  --gradient-brand: linear-gradient(135deg, var(--color-green) 0%, var(--color-blue) 40%, var(--color-cyan) 65%, var(--color-lime) 80%, var(--color-gold) 100%);
+  --gradient-brand-ribbon: linear-gradient(90deg, var(--color-green-dark), var(--color-green), var(--color-blue), var(--color-cyan), var(--color-lime), var(--color-gold));
+  --gradient-brand-dark: linear-gradient(135deg, var(--color-green-dark) 0%, var(--color-charcoal) 100%);
+
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  --header-height: 88px;
+  --container: min(1280px, calc(100% - 48px));
+  --container-wide: min(1440px, calc(100% - 48px));
+  --section-pad: clamp(48px, 5vw, 72px);
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 32px;
+  --radius-xl: 48px;
+
+  --color-bg-white: #FFFFFF;
+  --color-border-strong: rgba(31, 37, 33, 0.14);
+
+  --shadow-sm: 0 1px 3px rgba(31, 37, 33, 0.06);
+  --shadow-md: 0 4px 20px rgba(31, 37, 33, 0.07);
+  --shadow-lg: 0 12px 36px rgba(31, 37, 33, 0.09);
+  --shadow-xl: 0 20px 56px rgba(31, 37, 33, 0.1);
+  --shadow-soft: 0 8px 32px rgba(31, 37, 33, 0.06);
+  --shadow-card: 0 16px 48px rgba(31, 37, 33, 0.08);
+  --shadow-hover: 0 24px 64px rgba(31, 37, 33, 0.11);
+  --shadow-glow-green: 0 6px 24px rgba(98, 146, 15, 0.22);
+  --shadow-glow-gold: 0 6px 24px rgba(243, 140, 18, 0.2);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition: 0.45s var(--ease-out);
+}
