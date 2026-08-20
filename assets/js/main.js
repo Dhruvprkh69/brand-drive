@@ -232,6 +232,45 @@
     nav?.classList.toggle('is-open', isOpen);
     document.body.classList.toggle('is-nav-open', isOpen);
     document.body.style.overflow = isOpen ? 'hidden' : '';
+    if (!isOpen) resetDrillNav();
+  }
+
+  function resetDrillNav() {
+    nav?.classList.remove('is-drill-view');
+    document.querySelectorAll('.nav__item--has-dropdown.is-drill-open').forEach((el) => {
+      el.classList.remove('is-drill-open');
+    });
+  }
+
+  function ensureDrillHead(item) {
+    const dropdown = item.querySelector('.nav__dropdown');
+    if (!dropdown || dropdown.querySelector('.nav__drill-head')) return;
+
+    const trigger = item.querySelector('.nav__link--dropdown');
+    const href = trigger?.getAttribute('href') || '#';
+    const label = dropdown.getAttribute('aria-label')
+      || (trigger?.childNodes && Array.from(trigger.childNodes)
+        .filter((n) => n.nodeType === Node.TEXT_NODE)
+        .map((n) => n.textContent.trim())
+        .join(' '))
+      || 'Menu';
+
+    const head = document.createElement('div');
+    head.className = 'nav__drill-head';
+    head.innerHTML = `
+      <button type="button" class="nav__drill-back" aria-label="Back to main menu">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+        <span>Back</span>
+      </button>
+      <a href="${href}" class="nav__drill-title">${label}</a>
+    `;
+    dropdown.insertBefore(head, dropdown.firstChild);
+
+    head.querySelector('.nav__drill-back').addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      resetDrillNav();
+    });
   }
 
   navToggle?.addEventListener('click', () => {
@@ -246,22 +285,37 @@
     });
   });
 
+  document.querySelectorAll('.nav__dropdown a').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (!window.matchMedia('(max-width: 768px)').matches) return;
+      setMobileNavOpen(false);
+      resetDrillNav();
+    });
+  });
+
   function closeAllDropdowns() {
     document.querySelectorAll('.nav__item--has-dropdown.is-open').forEach((el) => el.classList.remove('is-open'));
   }
 
-  /* Nav dropdowns — desktop accordion; mobile goes straight to page */
+  /* Nav dropdowns — desktop hover/click; mobile drill-down panel */
   document.querySelectorAll('.nav__item--has-dropdown').forEach((item) => {
     const trigger = item.querySelector('.nav__link--dropdown');
     if (!trigger) return;
+
+    ensureDrillHead(item);
 
     trigger.addEventListener('click', (e) => {
       const isMobileNav = window.matchMedia('(max-width: 768px)').matches;
 
       if (isMobileNav) {
-        // Let the link navigate instantly (industries.html / solutions.html)
+        e.preventDefault();
+        e.stopPropagation();
         closeAllDropdowns();
-        setMobileNavOpen(false);
+        document.querySelectorAll('.nav__item--has-dropdown.is-drill-open').forEach((el) => {
+          if (el !== item) el.classList.remove('is-drill-open');
+        });
+        item.classList.add('is-drill-open');
+        nav?.classList.add('is-drill-view');
         return;
       }
 
@@ -281,7 +335,16 @@
   });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeAllDropdowns();
+    if (e.key !== 'Escape') return;
+    if (nav?.classList.contains('is-drill-view')) {
+      resetDrillNav();
+      return;
+    }
+    closeAllDropdowns();
+  });
+
+  window.matchMedia('(max-width: 768px)').addEventListener('change', (e) => {
+    if (!e.matches) resetDrillNav();
   });
 
   /* Dropdown scroll — keep wheel inside menu, not the page (Lenis fix) */

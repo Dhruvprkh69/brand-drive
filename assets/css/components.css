@@ -271,6 +271,11 @@
   border-left-color: var(--color-gold);
 }
 
+/* Injected by JS for mobile drill-down — hidden on desktop */
+.nav__drill-head {
+  display: none;
+}
+
 .nav--center { display: flex; align-items: center; }
 
 .nav__list {
@@ -854,15 +859,6 @@ body.is-nav-open .whatsapp-float {
   .nav__item--has-dropdown { width: 100%; }
 
   .nav__item--has-dropdown::before { display: none; }
-
-  /* Phone: no accordion dropdown — Industries/Solutions open the page directly */
-  .nav__dropdown {
-    display: none !important;
-  }
-
-  .nav__link--dropdown i {
-    display: none;
-  }
 
   .nav__link { font-size: 0.95rem; color: var(--color-dark) !important; opacity: 1 !important; }
 
