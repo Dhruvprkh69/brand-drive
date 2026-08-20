@@ -152,19 +152,6 @@
     overflow-x: hidden;
   }
 
-  .nav--center.is-open .nav__list,
-  .nav--center.is-open .header__cta-mobile {
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
-    will-change: transform;
-  }
-
-  .nav--center.is-open.is-drill-view .nav__list,
-  .nav--center.is-open.is-drill-view .header__cta-mobile {
-    transform: translateX(-28%);
-    opacity: 0;
-    pointer-events: none;
-  }
-
   .nav__link--dropdown {
     width: 100%;
     justify-content: space-between;
@@ -185,36 +172,44 @@
     transform: rotate(-90deg);
   }
 
+  /*
+   * Panel is position:fixed so it is NOT trapped inside .nav__list opacity/transform.
+   * (Previously fading the whole list also hid the submenu → blank white screen.)
+   */
   .nav--center.is-open .nav__dropdown {
     display: flex !important;
     flex-direction: column;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    min-height: 100%;
-    max-height: none;
-    margin: 0;
-    padding: calc(var(--header-height) + 8px) 28px 40px;
-    border-radius: 0;
-    box-shadow: none;
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 100% !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: calc(var(--header-height) + 8px) 28px 40px !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
     background: var(--color-bg) !important;
+    overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
-    transform: translateX(100%);
-    opacity: 1;
-    visibility: visible;
+    transform: translate3d(100%, 0, 0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
     pointer-events: none;
-    z-index: 2;
+    z-index: 1002;
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
   }
 
   .nav--center.is-open .nav__item--has-dropdown.is-drill-open .nav__dropdown {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0) !important;
     pointer-events: auto;
   }
 
@@ -287,8 +282,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .nav--center.is-open .nav__list,
-    .nav--center.is-open .header__cta-mobile,
     .nav--center.is-open .nav__dropdown {
       transition: none;
     }
@@ -297,29 +290,38 @@
   /* ── Hero (home) ── */
   .hero {
     min-height: 90svh;
-    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    padding-top: var(--header-height);
+    box-sizing: border-box;
   }
 
   .hero__content {
-    padding: calc(var(--header-height) + 12px) 16px 28px;
+    padding: 12px 16px 28px;
     max-width: 100%;
+    width: 100%;
+    margin-inline: 0;
+    margin-block: 0;
+    box-sizing: border-box;
   }
 
   .hero__tag {
     font-size: 0.6875rem;
     letter-spacing: 0.14em;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 
   .hero__title {
-    font-size: clamp(2rem, 9vw, 2.65rem);
-    margin-bottom: 16px;
+    font-size: clamp(1.9rem, 8.5vw, 2.5rem);
+    margin-bottom: 12px;
   }
 
   .hero__text {
     font-size: 0.95rem;
-    line-height: 1.7;
-    margin-bottom: 28px;
+    line-height: 1.65;
+    margin-bottom: 22px;
   }
 
   .hero__actions {
