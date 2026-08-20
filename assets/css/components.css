@@ -586,67 +586,6 @@ body.is-nav-open .whatsapp-float {
   animation-play-state: paused;
 }
 
-.marquee-section.is-paused .marquee__track,
-.marquee-section.is-paused.is-animated .marquee__track {
-  animation-play-state: paused !important;
-}
-
-/* ── Shared slideshow controls (pause / prev / next) ── */
-.slideshow-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 18px;
-  padding-inline: 8px;
-}
-
-.slideshow-controls__btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 1px solid var(--color-border);
-  background: var(--color-white);
-  color: var(--color-dark);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: var(--shadow-soft, 0 4px 14px rgba(0, 0, 0, 0.06));
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-}
-
-.slideshow-controls__btn:hover,
-.slideshow-controls__btn:focus-visible {
-  border-color: var(--color-green);
-  color: var(--color-green);
-  outline: none;
-}
-
-.slideshow-controls__btn:active {
-  transform: scale(0.96);
-}
-
-.slideshow-controls__btn--toggle[aria-pressed="true"] {
-  background: var(--color-green);
-  border-color: var(--color-green);
-  color: #fff;
-}
-
-.mobile-slideshow .slideshow-controls {
-  margin-top: 14px;
-}
-
-.feature-bar .slideshow-controls {
-  margin-top: 14px;
-  margin-bottom: 4px;
-}
-
-.marquee-section .slideshow-controls {
-  margin-top: 22px;
-  margin-bottom: 8px;
-}
-
 .marquee-section .marquee__item {
   flex-shrink: 0;
   width: 220px;

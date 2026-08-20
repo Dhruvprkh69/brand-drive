@@ -243,17 +243,7 @@
     display: flex !important;
     width: max-content !important;
     animation: featureBarScroll 32s linear infinite !important;
-    transform: translateX(var(--slide-nudge, 0px));
-    --slide-nudge: 0px;
-  }
-
-  .feature-bar.is-paused .feature-bar__track {
-    animation-play-state: paused !important;
-    transition: transform 0.35s ease;
-  }
-
-  .feature-bar:hover .feature-bar__track {
-    animation-play-state: paused;
+    transform: none;
   }
 
   .feature-bar__group {
@@ -333,11 +323,6 @@
 
   .marquee-section.is-animated .marquee__track {
     animation: marqueeScroll 36s linear infinite;
-  }
-
-  .marquee-section.is-paused .marquee__track,
-  .marquee-section.is-paused.is-animated .marquee__track {
-    animation-play-state: paused !important;
   }
 
   .marquee-section.is-animated .marquee__track--reverse {
@@ -434,16 +419,14 @@
     overflow: hidden;
     margin-inline: -16px;
     padding: 4px 16px 16px;
-    position: relative;
   }
 
   .mobile-slideshow__track {
     display: flex;
     width: max-content;
     will-change: transform;
-    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-    animation: none !important;
-    -webkit-animation: none !important;
+    animation: mobileCardSlideshow var(--slideshow-duration, 36s) linear infinite;
+    -webkit-animation: mobileCardSlideshow var(--slideshow-duration, 36s) linear infinite;
   }
 
   .mobile-slideshow__group {
@@ -464,6 +447,18 @@
     transform: none !important;
   }
 
+  @media (hover: hover) {
+    .mobile-slideshow:hover .mobile-slideshow__track {
+      animation-play-state: paused;
+      -webkit-animation-play-state: paused;
+    }
+  }
+
+  @keyframes mobileCardSlideshow {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .mobile-slideshow {
       overflow-x: auto;
@@ -477,9 +472,13 @@
     }
 
     .mobile-slideshow__track {
-      transition: none;
+      animation: none;
       overflow-x: auto;
       width: auto;
+    }
+
+    .mobile-slideshow__group[aria-hidden="true"] {
+      display: none;
     }
   }
 
@@ -901,16 +900,26 @@
     aspect-ratio: 16 / 10;
     max-height: none;
     width: 100%;
+    background: #f7f5f0;
+  }
+
+  .solution-section__visual img {
+    object-fit: contain;
   }
 
   .solution-section__visual--contain {
     aspect-ratio: 4 / 3;
-    background: #f4f1ea;
+    background: #f7f5f0;
   }
 
   .industry-detail__image {
     aspect-ratio: 16 / 10;
     width: 100%;
+    background: #f7f5f0;
+  }
+
+  .industry-detail__image img {
+    object-fit: contain;
   }
 
   .solution-section__heading {
