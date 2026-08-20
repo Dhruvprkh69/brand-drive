@@ -801,12 +801,28 @@
 
   /* ── Subpages ── */
   .founder {
-    gap: 28px;
+    gap: 32px;
   }
 
   .founder__portrait {
     max-width: 280px;
     margin-inline: auto;
+    min-height: 340px;
+    aspect-ratio: 3 / 4;
+  }
+
+  .timeline {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .timeline__year {
+    font-size: 1rem;
+  }
+
+  .timeline__text {
+    font-size: 0.78rem;
+    line-height: 1.5;
   }
 
   .industry-detail {
@@ -819,6 +835,17 @@
 
   .industry-detail__title {
     font-size: clamp(1.15rem, 4vw, 1.4rem);
+  }
+
+  .insight-tabs__btn {
+    padding: 13px 6px;
+    font-size: 0.7rem;
+    letter-spacing: 0.03em;
+  }
+
+  .insight-tabs__panels {
+    padding: 18px 16px 10px;
+    min-height: 140px;
   }
 
   .solution-section {

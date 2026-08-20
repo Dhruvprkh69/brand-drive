@@ -86,6 +86,111 @@
   background: var(--color-green);
 }
 
+.insight-tabs {
+  margin: 0 0 28px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.insight-tabs__nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  background: var(--color-green-soft);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.insight-tabs__btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 15px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-charcoal);
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.insight-tabs__btn.is-active {
+  background: var(--color-gold);
+  color: #fff;
+}
+
+.insight-tabs__btn:not(.is-active):hover {
+  color: var(--color-green);
+}
+
+.insight-tabs__panels {
+  padding: 22px 24px 14px;
+  min-height: 160px;
+}
+
+.insight-tabs .detail-list {
+  display: none;
+  margin-bottom: 0;
+}
+
+.insight-tabs .detail-list.is-active {
+  display: block;
+}
+
+.insight-tabs .detail-list ul {
+  padding-left: 12px;
+}
+
+.insight-tabs .detail-list ul li {
+  padding-left: 28px;
+  margin-bottom: 7px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.insight-tabs .detail-list ul li::before {
+  left: 8px;
+  top: 8px;
+}
+
+.insight-tabs .detail-list__title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.industry-consult {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #151515;
+  letter-spacing: 0.04em;
+}
+
+.industry-consult span {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.industry-consult:hover,
+.industry-consult:focus {
+  color: #151515;
+}
+
+.industry-consult:hover span {
+  transform: translateX(5px);
+}
+
 /* ── Solutions page (full-screen sections) ── */
 .solution-section {
   display: grid;
@@ -156,23 +261,30 @@
 
 /* ── About page ── */
 .founder {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 5vw, 64px);
+}
+
+.founder__top {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: clamp(48px, 8vw, 100px);
-  align-items: center;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(32px, 6vw, 72px);
+  align-items: stretch;
 }
 
 .founder__portrait {
   position: relative;
   border-radius: var(--radius-xl);
   overflow: hidden;
-  aspect-ratio: 3/4;
+  min-height: 100%;
   box-shadow: var(--shadow-card);
 }
 
 .founder__portrait img {
   width: 100%; height: 100%;
   object-fit: cover;
+  object-position: center 18%;
 }
 
 .founder__name {
@@ -182,7 +294,7 @@
 }
 
 .founder__role {
-  color: var(--color-gold);
+  color: var(--color-blue);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -190,7 +302,7 @@
   margin-bottom: 28px;
 }
 
-.founder__bio p {
+.founder__bio p:not(.founder__role) {
   color: var(--color-gray);
   margin-bottom: 20px;
   line-height: 1.85;
@@ -198,28 +310,34 @@
 
 .timeline {
   position: relative;
-  padding-left: 40px;
-  margin-top: 48px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  padding-top: 28px;
 }
 
 .timeline::before {
   content: '';
   position: absolute;
-  left: 8px; top: 0; bottom: 0;
-  width: 1px;
+  left: 0;
+  right: 0;
+  top: 6px;
+  height: 1px;
   background: var(--color-border);
 }
 
 .timeline__item {
   position: relative;
-  padding-bottom: 40px;
+  padding-top: 8px;
 }
 
 .timeline__item::before {
   content: '';
   position: absolute;
-  left: -36px; top: 6px;
-  width: 12px; height: 12px;
+  left: 0;
+  top: -28px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--color-green);
   border: 3px solid var(--color-bg);
@@ -280,6 +398,17 @@
   box-shadow: var(--shadow-soft);
   padding: 28px 20px 24px;
   text-align: center;
+}
+
+.page-why .process-step__num,
+.page-why .process-step:hover .process-step__num {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+  color: #fff;
+}
+
+.page-why .process-step__title {
+  color: var(--color-green);
 }
 
 @media (min-width: 769px) {
@@ -684,7 +813,7 @@
 @media (max-width: 1024px) {
   .industry-detail__grid,
   .solution-section,
-  .founder,
+  .founder__top,
   .case-study,
   .contact-layout,
   .contact-info__grid { grid-template-columns: 1fr; }

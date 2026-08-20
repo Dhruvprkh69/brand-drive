@@ -307,6 +307,18 @@ body,
   border-color: var(--color-green) !important;
 }
 
+.page-why .process-step__num,
+.page-why .process-step:nth-child(n) .process-step__num,
+.page-why .process-step:hover .process-step__num {
+  background: var(--color-gold) !important;
+  border-color: var(--color-gold) !important;
+  color: #fff !important;
+}
+
+.page-why .process-step__title {
+  color: var(--color-green) !important;
+}
+
 /* ── Split / logo showcase — no card, sits on page ── */
 .split__media--logo {
   background: transparent !important;

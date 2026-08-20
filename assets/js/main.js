@@ -357,4 +357,46 @@
   /* ── Footer year ── */
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  /* ── Industries: Challenges / Solutions / Benefits tabs ── */
+  document.querySelectorAll('.industry-detail__grid > div').forEach((col) => {
+    const lists = Array.from(col.querySelectorAll(':scope > .detail-list'));
+    if (lists.length < 2) return;
+
+    const box = document.createElement('div');
+    box.className = 'insight-tabs';
+
+    const nav = document.createElement('div');
+    nav.className = 'insight-tabs__nav';
+    nav.setAttribute('role', 'tablist');
+
+    lists.forEach((list, index) => {
+      const title = (list.querySelector('.detail-list__title')?.textContent || `Option ${index + 1}`).trim();
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'insight-tabs__btn' + (index === 0 ? ' is-active' : '');
+      btn.textContent = title;
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+
+      list.classList.toggle('is-active', index === 0);
+
+      btn.addEventListener('click', () => {
+        nav.querySelectorAll('.insight-tabs__btn').forEach((tab) => {
+          tab.classList.remove('is-active');
+          tab.setAttribute('aria-selected', 'false');
+        });
+        lists.forEach((panel) => panel.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected', 'true');
+        list.classList.add('is-active');
+      });
+
+      nav.appendChild(btn);
+    });
+
+    lists.forEach((list) => box.appendChild(list));
+    box.insertBefore(nav, box.firstChild);
+    col.insertBefore(box, col.querySelector('.btn, .industry-consult'));
+  });
 })();
