@@ -297,11 +297,11 @@
   /* ── Hero (home) ── */
   .hero {
     min-height: 90svh;
-    align-items: flex-end;
+    align-items: flex-start;
   }
 
   .hero__content {
-    padding: calc(var(--header-height) + 20px) 16px 36px;
+    padding: calc(var(--header-height) + 12px) 16px 28px;
     max-width: 100%;
   }
 
