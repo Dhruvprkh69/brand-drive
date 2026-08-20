@@ -11,46 +11,110 @@
   const loader = document.getElementById('loader');
   const loaderLogo = loader?.querySelector('.logo-brand--loader');
   let loaderHidden = false;
+  const isMobileView = () => window.matchMedia('(max-width: 768px)').matches;
 
   function hideLoader() {
     if (loaderHidden) return;
     loaderHidden = true;
     loader?.classList.add('is-hidden');
     document.body.classList.remove('is-loading');
+    document.body.classList.add('is-ready');
+    window.dispatchEvent(new Event('branddrive:ready'));
     if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
   }
 
-  function whenLogoReady() {
+  function waitForImage(img, timeoutMs) {
     return new Promise((resolve) => {
-      if (!loaderLogo) {
-        resolve();
+      if (!img) {
+        resolve(false);
         return;
       }
-      if (loaderLogo.complete && loaderLogo.naturalWidth > 0) {
-        loader?.classList.add('is-logo-ready');
-        resolve();
+      if (img.complete && img.naturalWidth > 0) {
+        resolve(true);
         return;
       }
-      const done = () => {
-        loader?.classList.add('is-logo-ready');
-        resolve();
+      let settled = false;
+      const done = (ok) => {
+        if (settled) return;
+        settled = true;
+        resolve(ok);
       };
-      loaderLogo.addEventListener('load', done, { once: true });
-      loaderLogo.addEventListener('error', done, { once: true });
-      setTimeout(done, 2200);
+      img.addEventListener('load', () => done(true), { once: true });
+      img.addEventListener('error', () => done(false), { once: true });
+      setTimeout(() => done(img.complete && img.naturalWidth > 0), timeoutMs);
     });
   }
 
-  whenLogoReady().then(() => {
-    const start = performance.now();
-    const finish = () => {
-      const wait = Math.max(0, 900 - (performance.now() - start));
-      setTimeout(hideLoader, wait);
-    };
-    if (document.readyState === 'complete') finish();
-    else window.addEventListener('load', finish, { once: true });
-    setTimeout(hideLoader, 3500);
-  });
+  function preloadUrl(src, timeoutMs) {
+    return new Promise((resolve) => {
+      if (!src) {
+        resolve(false);
+        return;
+      }
+      const img = new Image();
+      let settled = false;
+      const done = (ok) => {
+        if (settled) return;
+        settled = true;
+        resolve(ok);
+      };
+      img.onload = () => done(true);
+      img.onerror = () => done(false);
+      img.src = src;
+      setTimeout(() => done(img.complete && img.naturalWidth > 0), timeoutMs);
+    });
+  }
+
+  async function runLoader() {
+    // Laptop: keep fast, polished open
+    if (!isMobileView()) {
+      await waitForImage(loaderLogo, 1800);
+      loader?.classList.add('is-logo-ready');
+      const minShow = new Promise((r) => setTimeout(r, 700));
+      const pageLoad = new Promise((r) => {
+        if (document.readyState === 'complete') r();
+        else window.addEventListener('load', r, { once: true });
+      });
+      await Promise.race([
+        Promise.all([minShow, pageLoad]),
+        new Promise((r) => setTimeout(r, 2200)),
+      ]);
+      hideLoader();
+      return;
+    }
+
+    // Mobile: wait until first-screen assets are ready (up to ~5s)
+    loader?.classList.add('is-logo-ready');
+    const critical = [
+      waitForImage(loaderLogo, 4500),
+      waitForImage(document.querySelector('.logo-brand--header'), 4500),
+      waitForImage(document.querySelector('.hero__bg img'), 4500),
+      preloadUrl('assets/images/brands/brand-1.png', 4500),
+      preloadUrl('assets/images/brands/brand-2.png', 4500),
+      preloadUrl('assets/images/brands/brand-3.png', 4500),
+      preloadUrl('assets/images/brands/brand-4.png', 4500),
+      preloadUrl('assets/images/brands/brand-5.png', 4500),
+      preloadUrl('assets/images/brands/brand-6.png', 4500),
+    ];
+
+    const pageLoad = new Promise((r) => {
+      if (document.readyState === 'complete') r();
+      else window.addEventListener('load', r, { once: true });
+    });
+
+    await Promise.race([
+      Promise.all([...critical, pageLoad]),
+      new Promise((r) => setTimeout(r, 5000)),
+    ]);
+
+    // brief beat so client sees complete loader, then reveal
+    await new Promise((r) => setTimeout(r, 250));
+    hideLoader();
+  }
+
+  runLoader();
+  // absolute safety net
+  setTimeout(hideLoader, isMobileView() ? 5500 : 2800);
 
   /* ── Header ── */
   const header = document.getElementById('header');

@@ -11,6 +11,17 @@
     --container-wide: min(1440px, calc(100% - 32px));
   }
 
+  /* Hold first-screen images until mobile loader finishes */
+  body.is-loading .hero__bg img,
+  body.is-loading .marquee-section .marquee__item img {
+    visibility: hidden;
+  }
+
+  body.is-ready .hero__bg img,
+  body.is-ready .marquee-section .marquee__item img {
+    visibility: visible;
+  }
+
   body {
     font-size: 15px;
   }
@@ -324,8 +335,8 @@
     height: 78px;
     padding: 8px 10px;
     overflow: hidden;
-    background: #111 !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
+    background: var(--color-white) !important;
+    border-color: rgba(30, 86, 49, 0.08) !important;
   }
 
   .marquee-section .marquee__item img {

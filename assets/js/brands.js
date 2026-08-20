@@ -121,8 +121,21 @@
     setMarqueeMotion(false);
 
     const imgs = Array.from(document.querySelectorAll('.marquee-section img'));
-    waitForImages(imgs, 1200).then(() => {
+    const startMotion = () => {
       if (shouldAnimate) setMarqueeMotion(true);
+    };
+
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    waitForImages(imgs, isMobile ? 4500 : 1200).then(() => {
+      if (isMobile && document.body.classList.contains('is-loading')) {
+        window.addEventListener('branddrive:ready', startMotion, { once: true });
+        // safety if ready already fired
+        setTimeout(() => {
+          if (!document.body.classList.contains('is-loading')) startMotion();
+        }, 5200);
+      } else {
+        startMotion();
+      }
     });
   }
 

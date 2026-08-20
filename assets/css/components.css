@@ -5,7 +5,7 @@
   z-index: 9999;
   display: grid;
   place-items: center;
-  background: #0a0a0a;
+  background: var(--color-bg);
   transition: opacity 0.6s var(--ease-out), visibility 0.6s;
 }
 
