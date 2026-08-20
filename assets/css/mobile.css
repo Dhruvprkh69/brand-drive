@@ -296,7 +296,7 @@
 
   /* ── Hero (home) ── */
   .hero {
-    min-height: 72svh;
+    min-height: 80svh;
     align-items: flex-end;
   }
 
