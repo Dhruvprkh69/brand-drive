@@ -1,16 +1,12 @@
 /**
  * Brand Drive — brands.js
- * Dual-row marquee (desktop) + static logo grid (mobile) + clients grid
+ * Dual-row logo marquee (desktop + mobile) + clients grid
  */
 (function () {
   'use strict';
 
   const BRAND_COUNT = 12;
   const brandPath = (n) => `assets/images/brands/brand-${n}.png`;
-
-  function isMobile() {
-    return window.matchMedia('(max-width: 768px)').matches;
-  }
 
   function prefersReducedMotion() {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -72,7 +68,7 @@
     if (!track1.children.length) fillTrack(track1, [1, 2, 3, 4, 5, 6]);
     if (!track2.children.length) fillTrack(track2, [7, 8, 9, 10, 11, 12]);
 
-    const shouldAnimate = !isMobile() && !prefersReducedMotion();
+    const shouldAnimate = !prefersReducedMotion();
 
     if (shouldAnimate) {
       duplicateTrack(track1);

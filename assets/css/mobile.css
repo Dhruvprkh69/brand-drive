@@ -141,6 +141,18 @@
     min-height: 40px;
     display: flex;
     align-items: center;
+    white-space: normal;
+    padding-left: 12px;
+  }
+
+  .nav__item--has-dropdown.is-open .nav__dropdown,
+  .nav__item--has-dropdown:hover .nav__dropdown,
+  .nav__item--has-dropdown:focus-within .nav__dropdown {
+    transform: none !important;
+    left: auto !important;
+    max-height: min(55vh, 520px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* ── Hero (home) ── */
@@ -201,59 +213,67 @@
     font-size: clamp(1.75rem, 7vw, 2.35rem);
   }
 
-  /* ── Feature bar — static 2×2 grid on phone (no wrapping marquee) ── */
+  /* ── Feature bar — horizontal slideshow on phone only ── */
   .feature-bar {
-    padding: 20px 0;
-    overflow: visible;
+    padding: 16px 0;
+    overflow: hidden;
   }
 
   .feature-bar .container,
   .feature-bar__inner {
-    width: 100%;
-    max-width: none;
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px 12px;
-    padding-inline: 16px;
-    overflow: visible;
+    width: 100% !important;
+    max-width: none !important;
+    display: block !important;
+    padding-inline: 0 !important;
+    overflow: hidden;
   }
 
   .feature-bar__track {
-    display: contents !important;
-    animation: none !important;
-    width: auto !important;
-    transform: none !important;
+    display: flex !important;
+    width: max-content !important;
+    animation: featureBarScroll 32s linear infinite !important;
+    transform: none;
   }
 
   .feature-bar__group {
-    display: contents !important;
+    display: flex !important;
+    align-items: center;
+    gap: 28px;
+    padding-inline: 14px;
+    flex-shrink: 0;
   }
 
   .feature-bar__group[aria-hidden="true"] {
-    display: none !important;
+    display: flex !important;
   }
 
   .feature-bar__item {
-    flex: none;
+    flex: 0 0 auto;
     gap: 10px;
-    align-items: flex-start;
-    white-space: normal;
+    align-items: center;
+    white-space: nowrap;
   }
 
   .feature-bar__text {
-    font-size: 0.75rem;
-    line-height: 1.4;
-    white-space: normal;
+    font-size: 0.78rem;
+    line-height: 1.35;
+    white-space: nowrap;
   }
 
   .feature-bar:hover .feature-bar__track {
-    animation: none;
+    animation-play-state: paused;
   }
 
-  /* ── Marquee — static grid on phone so logos paint fully ── */
+  @media (prefers-reduced-motion: reduce) {
+    .feature-bar__track {
+      animation: none !important;
+    }
+  }
+
+  /* ── Marquee — restore horizontal logo slideshow on phone ── */
   .marquee-section {
     padding-block: clamp(40px, 8vw, 56px);
-    overflow: visible;
+    overflow: hidden;
   }
 
   .marquee-section__header {
@@ -267,34 +287,42 @@
 
   .marquee-section .marquee,
   .marquee-section .marquee--offset {
-    display: block;
-    overflow: visible;
+    display: flex;
+    overflow: hidden;
     margin-top: 0;
   }
 
   .marquee-section .marquee--offset {
-    margin-top: 10px;
+    margin-top: 12px;
   }
 
   .marquee-section .marquee__track,
   .marquee-section .marquee__track--reverse,
   .marquee-section.is-animated .marquee__track {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-    width: 100%;
-    max-width: 100%;
-    animation: none !important;
-    transform: none !important;
-    will-change: auto;
-    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: max-content;
+    max-width: none;
+    padding: 0;
     box-sizing: border-box;
+    transform: none;
+    will-change: transform;
+  }
+
+  .marquee-section.is-animated .marquee__track {
+    animation: marqueeScroll 36s linear infinite;
+  }
+
+  .marquee-section.is-animated .marquee__track--reverse {
+    animation-direction: reverse;
   }
 
   .marquee-section .marquee__item {
-    width: 100%;
-    height: 92px;
-    padding: 10px 8px;
+    flex-shrink: 0;
+    width: 140px;
+    height: 78px;
+    padding: 8px 10px;
     overflow: hidden;
   }
 
@@ -302,8 +330,9 @@
     width: auto;
     height: auto;
     max-width: 100%;
-    max-height: 72px;
+    max-height: 100%;
     object-fit: contain;
+    object-position: center;
     filter: none;
   }
 
@@ -853,6 +882,42 @@
     gap: 24px;
   }
 
+  .solution-section__visual {
+    aspect-ratio: 16 / 10;
+    max-height: none;
+    width: 100%;
+  }
+
+  .solution-section__visual--contain {
+    aspect-ratio: 4 / 3;
+    background: #f4f1ea;
+  }
+
+  .industry-detail__image {
+    aspect-ratio: 16 / 10;
+    width: 100%;
+  }
+
+  .solution-section__heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .solution-section__heading .solution-section__num {
+    margin-bottom: 0;
+    flex-shrink: 0;
+    font-size: clamp(2rem, 8vw, 2.6rem);
+    line-height: 1;
+  }
+
+  .solution-section__heading .solution-section__title {
+    margin-bottom: 0;
+    font-size: clamp(1.35rem, 5vw, 1.7rem);
+    line-height: 1.15;
+  }
+
   .solution-section__title {
     font-size: clamp(1.5rem, 5.5vw, 1.85rem);
   }
@@ -932,12 +997,12 @@
   }
 
   .marquee-section .marquee__item {
-    width: 100%;
-    height: 88px;
+    width: 128px;
+    height: 72px;
   }
 
   .marquee-section .marquee__item img {
-    max-height: 64px;
+    max-height: 100%;
   }
 
   .card__body {

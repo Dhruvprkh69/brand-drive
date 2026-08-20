@@ -230,7 +230,14 @@
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
+}
+
+@media (min-width: 769px) {
+  .nav__item--has-dropdown:hover .nav__dropdown,
+  .nav__item--has-dropdown.is-open .nav__dropdown,
+  .nav__item--has-dropdown:focus-within .nav__dropdown {
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 .nav__dropdown ul {
@@ -843,7 +850,9 @@ body.is-nav-open .whatsapp-float {
 
   .nav__dropdown {
     position: static;
-    transform: none;
+    transform: none !important;
+    left: auto;
+    right: auto;
     min-width: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.06);
@@ -863,16 +872,21 @@ body.is-nav-open .whatsapp-float {
   }
 
   .nav__item--has-dropdown.is-open .nav__dropdown {
-    max-height: 420px;
+    max-height: min(55vh, 520px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 8px 0;
     pointer-events: auto;
     margin-top: 8px;
+    transform: none !important;
   }
 
   .nav__dropdown a {
     color: inherit;
     padding: 10px 16px;
     font-size: 0.75rem;
+    white-space: normal;
+    line-height: 1.35;
   }
 
   .nav__link { font-size: 0.95rem; color: var(--color-dark) !important; opacity: 1 !important; }
