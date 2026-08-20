@@ -250,12 +250,21 @@
     document.querySelectorAll('.nav__item--has-dropdown.is-open').forEach((el) => el.classList.remove('is-open'));
   }
 
-  /* Nav dropdowns — desktop click + mobile tap */
+  /* Nav dropdowns — desktop accordion; mobile goes straight to page */
   document.querySelectorAll('.nav__item--has-dropdown').forEach((item) => {
     const trigger = item.querySelector('.nav__link--dropdown');
     if (!trigger) return;
 
     trigger.addEventListener('click', (e) => {
+      const isMobileNav = window.matchMedia('(max-width: 768px)').matches;
+
+      if (isMobileNav) {
+        // Let the link navigate instantly (industries.html / solutions.html)
+        closeAllDropdowns();
+        setMobileNavOpen(false);
+        return;
+      }
+
       e.preventDefault();
       e.stopPropagation();
       const wasOpen = item.classList.contains('is-open');
@@ -265,6 +274,7 @@
   });
 
   document.addEventListener('click', (e) => {
+    if (window.matchMedia('(max-width: 768px)').matches) return;
     if (!e.target.closest('.nav__item--has-dropdown')) {
       closeAllDropdowns();
     }

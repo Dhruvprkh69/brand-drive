@@ -340,45 +340,81 @@
   position: relative;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-  padding-top: 28px;
+  gap: clamp(20px, 3vw, 40px);
+  padding-top: 36px;
+  margin-top: 8px;
 }
 
 .timeline::before {
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 6px;
-  height: 1px;
-  background: var(--color-border);
+  left: 6px;
+  right: 6px;
+  top: 11px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--color-green-dark) 0%,
+    var(--color-green) 40%,
+    var(--color-blue) 70%,
+    var(--color-gold) 100%
+  );
+  border-radius: 99px;
+  opacity: 0.85;
 }
 
 .timeline__item {
   position: relative;
-  padding-top: 8px;
+  padding-top: 18px;
 }
 
 .timeline__item::before {
   content: '';
   position: absolute;
   left: 0;
-  top: -28px;
-  width: 12px;
-  height: 12px;
+  top: -31px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--color-green);
-  border: 3px solid var(--color-bg);
+  border: 3px solid var(--color-white);
+  box-shadow: 0 0 0 2px var(--color-green);
+  z-index: 1;
+}
+
+.timeline__item:nth-child(2)::before {
+  background: var(--color-blue);
+  box-shadow: 0 0 0 2px var(--color-blue);
+}
+
+.timeline__item:nth-child(3)::before {
+  background: var(--color-gold);
+  box-shadow: 0 0 0 2px var(--color-gold);
 }
 
 .timeline__year {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
-  color: var(--color-gold);
-  margin-bottom: 6px;
+  font-size: clamp(1.35rem, 2vw, 1.65rem);
+  font-weight: 600;
+  color: var(--color-green-dark);
+  margin-bottom: 10px;
+  letter-spacing: 0.01em;
 }
 
-.timeline__text { color: var(--color-gray); }
+.timeline__item:nth-child(2) .timeline__year {
+  color: var(--color-blue);
+}
+
+.timeline__item:nth-child(3) .timeline__year {
+  color: var(--color-gold);
+}
+
+.timeline__text {
+  color: var(--color-gray);
+  line-height: 1.7;
+  font-size: 0.95rem;
+  max-width: 32ch;
+}
 
 .values-grid {
   display: grid;

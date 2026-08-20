@@ -148,24 +148,6 @@
     align-items: center;
   }
 
-  .nav__dropdown a {
-    min-height: 40px;
-    display: flex;
-    align-items: center;
-    white-space: normal;
-    padding-left: 12px;
-  }
-
-  .nav__item--has-dropdown.is-open .nav__dropdown,
-  .nav__item--has-dropdown:hover .nav__dropdown,
-  .nav__item--has-dropdown:focus-within .nav__dropdown {
-    transform: none !important;
-    left: auto !important;
-    max-height: min(55vh, 520px);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
   /* ── Hero (home) ── */
   .hero {
     min-height: auto;
@@ -214,6 +196,10 @@
   .page-hero {
     min-height: auto;
     padding-bottom: 32px;
+  }
+
+  .page-hero--about {
+    min-height: 42vh;
   }
 
   .page-hero__content {
@@ -327,6 +313,14 @@
 
   .marquee-section.is-animated .marquee__track--reverse {
     animation-direction: reverse;
+  }
+
+  /* Press-and-hold: freeze CSS marquee at current frame */
+  .marquee-section.is-hold-paused .marquee__track,
+  .marquee-section.is-hold-paused.is-animated .marquee__track,
+  .marquee-section.is-hold-paused .marquee__track--reverse {
+    animation-play-state: paused !important;
+    -webkit-animation-play-state: paused !important;
   }
 
   .marquee-section .marquee__item {
@@ -452,6 +446,15 @@
       animation-play-state: paused;
       -webkit-animation-play-state: paused;
     }
+  }
+
+  /* Press-and-hold: freeze card slideshow at current frame */
+  .mobile-slideshow.is-hold-paused .mobile-slideshow__track,
+  #solutions .mobile-slideshow.is-hold-paused .mobile-slideshow__track,
+  .why-grid.mobile-slideshow.is-hold-paused .mobile-slideshow__track,
+  .process-track.mobile-slideshow.is-hold-paused .mobile-slideshow__track {
+    animation-play-state: paused !important;
+    -webkit-animation-play-state: paused !important;
   }
 
   @keyframes mobileCardSlideshow {
@@ -856,16 +859,46 @@
 
   .timeline {
     grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    gap: 10px;
+    padding-top: 28px;
+  }
+
+  .timeline::before {
+    top: 8px;
+    left: 4px;
+    right: 4px;
+    height: 2px;
+  }
+
+  .timeline__item {
+    padding-top: 14px;
+  }
+
+  .timeline__item::before {
+    width: 12px;
+    height: 12px;
+    top: -24px;
+    border-width: 2px;
+    box-shadow: 0 0 0 1.5px var(--color-green);
+  }
+
+  .timeline__item:nth-child(2)::before {
+    box-shadow: 0 0 0 1.5px var(--color-blue);
+  }
+
+  .timeline__item:nth-child(3)::before {
+    box-shadow: 0 0 0 1.5px var(--color-gold);
   }
 
   .timeline__year {
     font-size: 1rem;
+    margin-bottom: 6px;
   }
 
   .timeline__text {
-    font-size: 0.78rem;
-    line-height: 1.5;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    max-width: none;
   }
 
   .industry-detail {

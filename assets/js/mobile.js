@@ -144,6 +144,35 @@
   function boot() {
     initFooterAccordion();
     initMobileSlideshows();
+    initHoldToPause();
+  }
+
+  /**
+   * Press-and-hold to pause auto-scroll (mobile only).
+   * Touch down → pause at current frame; lift → resume (no restart).
+   */
+  function initHoldToPause() {
+    const targets = document.querySelectorAll(
+      '.marquee-section, .mobile-slideshow, #solutions .mobile-slideshow, .why-grid.mobile-slideshow, .process-track.mobile-slideshow'
+    );
+
+    targets.forEach((el) => {
+      if (el.dataset.holdPauseBound === 'true') return;
+      el.dataset.holdPauseBound = 'true';
+
+      const pause = () => {
+        if (!MOBILE_MQ.matches || REDUCED_MOTION.matches) return;
+        el.classList.add('is-hold-paused');
+      };
+
+      const resume = () => {
+        el.classList.remove('is-hold-paused');
+      };
+
+      el.addEventListener('touchstart', pause, { passive: true });
+      el.addEventListener('touchend', resume, { passive: true });
+      el.addEventListener('touchcancel', resume, { passive: true });
+    });
   }
 
   if (document.readyState === 'loading') {
@@ -155,10 +184,17 @@
   MOBILE_MQ.addEventListener('change', () => {
     setupFooterColumns();
     initMobileSlideshows();
+    initHoldToPause();
+    if (!MOBILE_MQ.matches) {
+      document.querySelectorAll('.is-hold-paused').forEach((el) => el.classList.remove('is-hold-paused'));
+    }
     if (!isMobileFooter()) {
       document.querySelectorAll('.footer__col.is-open').forEach((col) => col.classList.remove('is-open'));
     }
   });
 
-  REDUCED_MOTION.addEventListener('change', initMobileSlideshows);
+  REDUCED_MOTION.addEventListener('change', () => {
+    initMobileSlideshows();
+    document.querySelectorAll('.is-hold-paused').forEach((el) => el.classList.remove('is-hold-paused'));
+  });
 })();
