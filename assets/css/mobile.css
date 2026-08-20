@@ -150,12 +150,12 @@
 
   /* ── Hero (home) ── */
   .hero {
-    min-height: auto;
-    min-height: 100svh;
+    min-height: 72svh;
+    align-items: flex-end;
   }
 
   .hero__content {
-    padding: calc(var(--header-height) + 24px) 16px 48px;
+    padding: calc(var(--header-height) + 20px) 16px 36px;
     max-width: 100%;
   }
 
