@@ -5,7 +5,7 @@
   z-index: 9999;
   display: grid;
   place-items: center;
-  background: var(--color-bg);
+  background: #0a0a0a;
   transition: opacity 0.6s var(--ease-out), visibility 0.6s;
 }
 
@@ -27,6 +27,11 @@
   display: block;
   opacity: 0;
   animation: loaderLogoIn 0.85s var(--ease-out) 0.1s forwards;
+}
+
+.loader.is-logo-ready .loader__logo-wrap {
+  opacity: 1;
+  animation: none;
 }
 
 .logo-brand {
@@ -53,6 +58,8 @@
 .logo-brand--loader {
   width: min(300px, 72vw);
   height: auto;
+  min-height: 96px;
+  object-fit: contain;
 }
 
 .logo-brand--showcase {

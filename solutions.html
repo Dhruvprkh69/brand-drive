@@ -1,7 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  
+  <script>
+    (function () {
+      var p = location.pathname;
+      if (p.length > 1 && !p.endsWith('/') && !/\.[a-zA-Z0-9]+$/.test(p)) {
+        location.replace(p + '/' + location.search + location.hash);
+      }
+    })();
+  </script>
+  <link rel="preload" as="image" href="assets/images/brand/logo.png">
+  <link rel="preload" as="image" href="assets/images/brand/logo-header.png">
+<meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Brand Drive® solutions — Brand Development, Operations, Franchise, Menu Engineering, Supply Chain & more.">
   <title>Solutions — Brand Drive®</title>
@@ -20,7 +31,7 @@
   <link rel="stylesheet" href="assets/css/minimal-brand.css">
 </head>
 <body class="is-loading">
-  <div class="loader" id="loader"><div class="loader__inner"><span class="loader__logo-wrap"><img src="assets/images/brand/logo.png" alt="Brand Drive®" class="logo-brand logo-brand--loader"></span><div class="loader__bar" aria-hidden="true"><span></span></div></div></div>
+  <div class="loader" id="loader"><div class="loader__inner"><span class="loader__logo-wrap"><img src="assets/images/brand/logo.png" alt="Brand Drive®" class="logo-brand logo-brand--loader" width="600" height="360" decoding="sync" fetchpriority="high"></span><div class="loader__bar" aria-hidden="true"><span></span></div></div></div>
   <div class="cursor-glow" id="cursor-glow" aria-hidden="true"></div>
   <a class="whatsapp-float" href="https://wa.me/919824461445" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
 

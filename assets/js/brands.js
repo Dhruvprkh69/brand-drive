@@ -21,6 +21,8 @@
     img.width = 220;
     img.height = 110;
     img.decoding = 'async';
+    img.loading = 'eager';
+    if (n <= 4) img.fetchPriority = 'high';
     item.appendChild(img);
     return item;
   }
@@ -37,7 +39,10 @@
       const clone = item.cloneNode(true);
       clone.setAttribute('aria-hidden', 'true');
       const img = clone.querySelector('img');
-      if (img) img.alt = '';
+      if (img) {
+        img.alt = '';
+        img.loading = 'eager';
+      }
       track.appendChild(clone);
     });
     track.dataset.cloned = 'true';
@@ -56,6 +61,28 @@
     section.classList.toggle('is-animated', animated);
   }
 
+  function waitForImages(imgs, timeoutMs) {
+    return new Promise((resolve) => {
+      let left = imgs.length;
+      if (!left) {
+        resolve();
+        return;
+      }
+      const done = () => {
+        left -= 1;
+        if (left <= 0) resolve();
+      };
+      imgs.forEach((img) => {
+        if (img.complete && img.naturalWidth > 0) done();
+        else {
+          img.addEventListener('load', done, { once: true });
+          img.addEventListener('error', done, { once: true });
+        }
+      });
+      setTimeout(resolve, timeoutMs);
+    });
+  }
+
   function initMarquees() {
     const row1 = document.querySelector('[data-brands-row="1"]');
     const row2 = document.querySelector('[data-brands-row="2"]');
@@ -67,6 +94,13 @@
 
     if (!track1.children.length) fillTrack(track1, [1, 2, 3, 4, 5, 6]);
     if (!track2.children.length) fillTrack(track2, [7, 8, 9, 10, 11, 12]);
+
+    // Ensure inline HTML logos also load eagerly on first paint
+    document.querySelectorAll('.marquee-section img').forEach((img, i) => {
+      img.loading = 'eager';
+      img.decoding = 'async';
+      if (i < 4) img.fetchPriority = 'high';
+    });
 
     const shouldAnimate = !prefersReducedMotion();
 
@@ -87,15 +121,7 @@
     setMarqueeMotion(false);
 
     const imgs = Array.from(document.querySelectorAll('.marquee-section img'));
-    const ready = imgs.map((img) => {
-      if (img.complete) return Promise.resolve();
-      return new Promise((resolve) => {
-        img.addEventListener('load', resolve, { once: true });
-        img.addEventListener('error', resolve, { once: true });
-      });
-    });
-
-    Promise.all(ready).then(() => {
+    waitForImages(imgs, 1200).then(() => {
       if (shouldAnimate) setMarqueeMotion(true);
     });
   }
@@ -108,6 +134,7 @@
     img.width = 220;
     img.height = 110;
     img.decoding = 'async';
+    img.loading = 'lazy';
     return img;
   }
 
@@ -129,7 +156,12 @@
     buildLogoGrid();
   }
 
-  document.addEventListener('DOMContentLoaded', init);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
   let resizeTimer;
   window.addEventListener('resize', () => {
     window.clearTimeout(resizeTimer);

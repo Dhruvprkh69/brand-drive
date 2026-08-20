@@ -9,17 +9,48 @@
 
   /* ── Loader ── */
   const loader = document.getElementById('loader');
+  const loaderLogo = loader?.querySelector('.logo-brand--loader');
+  let loaderHidden = false;
 
   function hideLoader() {
+    if (loaderHidden) return;
+    loaderHidden = true;
     loader?.classList.add('is-hidden');
     document.body.classList.remove('is-loading');
     if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
   }
 
-  window.addEventListener('load', () => {
-    setTimeout(hideLoader, 1900);
+  function whenLogoReady() {
+    return new Promise((resolve) => {
+      if (!loaderLogo) {
+        resolve();
+        return;
+      }
+      if (loaderLogo.complete && loaderLogo.naturalWidth > 0) {
+        loader?.classList.add('is-logo-ready');
+        resolve();
+        return;
+      }
+      const done = () => {
+        loader?.classList.add('is-logo-ready');
+        resolve();
+      };
+      loaderLogo.addEventListener('load', done, { once: true });
+      loaderLogo.addEventListener('error', done, { once: true });
+      setTimeout(done, 2200);
+    });
+  }
+
+  whenLogoReady().then(() => {
+    const start = performance.now();
+    const finish = () => {
+      const wait = Math.max(0, 900 - (performance.now() - start));
+      setTimeout(hideLoader, wait);
+    };
+    if (document.readyState === 'complete') finish();
+    else window.addEventListener('load', finish, { once: true });
+    setTimeout(hideLoader, 3500);
   });
-  setTimeout(hideLoader, 2800);
 
   /* ── Header ── */
   const header = document.getElementById('header');
