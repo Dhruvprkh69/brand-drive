@@ -1077,30 +1077,26 @@
     gap: 24px;
   }
 
-  .solution-section__visual {
+  /* Sharp rectangle — no cream corner gaps from contain + large radius */
+  .solution-section__visual,
+  .solution-section__visual--contain,
+  .industry-detail__image {
+    border-radius: 0;
     aspect-ratio: 16 / 10;
     max-height: none;
     width: 100%;
-    background: #f7f5f0;
+    background: transparent;
+    box-shadow: none;
+    overflow: hidden;
   }
 
-  .solution-section__visual img {
-    object-fit: contain;
-  }
-
-  .solution-section__visual--contain {
-    aspect-ratio: 4 / 3;
-    background: #f7f5f0;
-  }
-
-  .industry-detail__image {
-    aspect-ratio: 16 / 10;
-    width: 100%;
-    background: #f7f5f0;
-  }
-
+  .solution-section__visual img,
+  .solution-section__visual--contain img,
   .industry-detail__image img {
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 
   .solution-section__heading {
