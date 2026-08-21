@@ -5,10 +5,13 @@ Use these EXACT filenames (already wired in code):
   brand-1.png
   brand-2.png
   …
-  brand-12.png
+  brand-14.png
 
-Add or replace files here (`brand-1.png` … `brand-12.png`).
-To change count, update BRAND_COUNT in assets/js/brands.js
+  Row 1 (marquee): brand-1 … brand-7
+  Row 2 (marquee): brand-8 … brand-14
+
+Add or replace files here (`brand-1.png` … `brand-14.png`).
+To change count, update BRAND_COUNT / ROW1 / ROW2 in assets/js/brands.js
 
 Optional (your side — not required):
 - PNG with transparent background

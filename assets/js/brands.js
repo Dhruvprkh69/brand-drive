@@ -5,8 +5,10 @@
 (function () {
   'use strict';
 
-  const BRAND_COUNT = 12;
+  const BRAND_COUNT = 14;
   const brandPath = (n) => `assets/images/brands/brand-${n}.png`;
+  const ROW1 = [1, 2, 3, 4, 5, 6, 7];
+  const ROW2 = [8, 9, 10, 11, 12, 13, 14];
 
   function prefersReducedMotion() {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -92,8 +94,11 @@
     const track2 = row2.querySelector('.marquee__track');
     if (!track1 || !track2) return;
 
-    if (!track1.children.length) fillTrack(track1, [1, 2, 3, 4, 5, 6]);
-    if (!track2.children.length) fillTrack(track2, [7, 8, 9, 10, 11, 12]);
+    // Always rebuild rows so HTML + JS stay in sync (7 + 7)
+    track1.dataset.cloned = 'false';
+    track2.dataset.cloned = 'false';
+    fillTrack(track1, ROW1);
+    fillTrack(track2, ROW2);
 
     // Ensure inline HTML logos also load eagerly on first paint
     document.querySelectorAll('.marquee-section img').forEach((img, i) => {
