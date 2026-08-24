@@ -1,12 +1,17 @@
 /**
  * Brand Drive — mobile.js
- * Mobile-only UX: footer accordion + auto card slideshows.
+ * Mobile-only UX: footer accordion + iOS-safe card carousels.
+ *
+ * iOS Safari blanks continuous translate / scrollLeft / marginLeft marquees
+ * after one loop. Mobile slideshows use one-card-at-a-time fades — no
+ * horizontal scroll animation, no clones, no transform loops.
  */
 (function () {
   'use strict';
 
   const MOBILE_MQ = window.matchMedia('(max-width: 768px)');
   const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const carousels = new WeakMap();
 
   function isMobileFooter() {
     return MOBILE_MQ.matches;
@@ -16,72 +21,153 @@
     return MOBILE_MQ.matches && !REDUCED_MOTION.matches;
   }
 
-  const runningLoops = new WeakMap();
-
-  function stopJsLoop(container) {
-    const handle = runningLoops.get(container);
-    if (handle) {
-      cancelAnimationFrame(handle.raf);
-      runningLoops.delete(container);
+  function stopCarousel(container) {
+    const state = carousels.get(container);
+    if (!state) return;
+    if (state.timer) window.clearInterval(state.timer);
+    if (state.io) state.io.disconnect();
+    if (state.onTouchStart) {
+      container.removeEventListener('touchstart', state.onTouchStart);
+      container.removeEventListener('touchend', state.onTouchEnd);
+      container.removeEventListener('touchcancel', state.onTouchEnd);
     }
+    carousels.delete(container);
   }
 
-  function groupWidth(group) {
-    return group ? Math.round(group.offsetWidth) : 0;
+  function forceVisible(root) {
+    root.querySelectorAll('.reveal, .process-step, .solution-card, .why-item, .value-card').forEach((el) => {
+      el.classList.add('is-visible');
+      // Clear GSAP/reveal inline opacity so CSS can hide inactive slides
+      el.style.removeProperty('opacity');
+      el.style.removeProperty('visibility');
+      el.style.setProperty('transform', 'none', 'important');
+    });
+  }
+
+  function getCards(container) {
+    const track = container.querySelector('.mobile-slideshow__track');
+    if (!track) return [];
+    return Array.from(track.children).filter((el) => !el.classList.contains('mobile-slideshow__dots'));
+  }
+
+  function showCard(container, index) {
+    const cards = getCards(container);
+    if (!cards.length) return 0;
+    const i = ((index % cards.length) + cards.length) % cards.length;
+
+    cards.forEach((card, n) => {
+      const active = n === i;
+      card.classList.toggle('is-slide-active', active);
+      card.setAttribute('aria-hidden', active ? 'false' : 'true');
+    });
+
+    const dots = container.querySelectorAll('.mobile-slideshow__dot');
+    dots.forEach((dot, n) => {
+      dot.classList.toggle('is-active', n === i);
+      dot.setAttribute('aria-current', n === i ? 'true' : 'false');
+    });
+
+    forceVisible(container);
+    return i;
+  }
+
+  function ensureDots(container, count) {
+    let dots = container.querySelector('.mobile-slideshow__dots');
+    if (!dots) {
+      dots = document.createElement('div');
+      dots.className = 'mobile-slideshow__dots';
+      dots.setAttribute('aria-hidden', 'true');
+      container.appendChild(dots);
+    }
+    dots.innerHTML = '';
+    for (let n = 0; n < count; n += 1) {
+      const dot = document.createElement('span');
+      dot.className = 'mobile-slideshow__dot' + (n === 0 ? ' is-active' : '');
+      dots.appendChild(dot);
+    }
   }
 
   /**
-   * iOS Safari unpaints overflow/transform layers when scrollLeft or
-   * translateX wraps. Move the leading group to the end instead (tape loop).
+   * iOS-safe: fade between cards. Never scrolls or translates the track.
    */
-  function startJsLoop(container) {
-    stopJsLoop(container);
+  function startCarousel(container) {
+    stopCarousel(container);
+    forceVisible(container);
+
     const track = container.querySelector('.mobile-slideshow__track');
-    if (!track || track.children.length < 2) return;
+    if (!track) return;
 
-    container.scrollLeft = 0;
     track.classList.add('is-js-driven');
-    track.style.cssText += 'animation:none;-webkit-animation:none;transform:none;-webkit-transform:none;margin-left:0;';
+    track.style.marginLeft = '';
+    track.style.transform = '';
+    track.style.webkitTransform = '';
+    track.style.animation = 'none';
+    container.scrollLeft = 0;
 
-    const durationSec = parseFloat(track.style.getPropertyValue('--slideshow-duration'))
-      || parseFloat(getComputedStyle(track).getPropertyValue('--slideshow-duration'))
-      || 36;
+    const cards = getCards(container);
+    if (cards.length < 2) return;
 
-    let offset = 0;
-    let last = 0;
-    const state = { raf: 0 };
+    ensureDots(container, cards.length);
 
-    function applyOffset() {
-      track.style.marginLeft = -offset + 'px';
-    }
+    const secondsPerCard = container.classList.contains('process-track')
+      || container.classList.contains('grid-3')
+      || container.classList.contains('values-grid')
+      ? 4
+      : 5;
 
-    function tick(now) {
-      if (!last) last = now;
-      const dt = Math.min(now - last, 40);
-      last = now;
+    let index = showCard(container, 0);
+    let inView = true;
+    let touchX = 0;
+    let touchY = 0;
 
-      if (!container.classList.contains('is-hold-paused') && !document.hidden) {
-        const first = track.firstElementChild;
-        const w = groupWidth(first);
-        if (w > 1) {
-          offset += (w / (durationSec * 1000)) * dt;
-          while (track.children.length > 1 && offset >= groupWidth(track.firstElementChild)) {
-            const node = track.firstElementChild;
-            const nodeW = groupWidth(node);
-            track.appendChild(node);
-            offset -= nodeW;
-          }
-          applyOffset();
-        }
-      } else {
-        last = now;
+    const state = {
+      timer: null,
+      io: null,
+      onTouchStart: null,
+      onTouchEnd: null,
+      tick() {
+        if (!inView || document.hidden || container.classList.contains('is-hold-paused')) return;
+        index = showCard(container, index + 1);
+      },
+    };
+
+    state.timer = window.setInterval(state.tick, secondsPerCard * 1000);
+
+    state.onTouchStart = (e) => {
+      if (!e.touches || !e.touches[0]) return;
+      touchX = e.touches[0].clientX;
+      touchY = e.touches[0].clientY;
+    };
+
+    state.onTouchEnd = (e) => {
+      if (!e.changedTouches || !e.changedTouches[0]) return;
+      const dx = e.changedTouches[0].clientX - touchX;
+      const dy = e.changedTouches[0].clientY - touchY;
+      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+      index = showCard(container, index + (dx < 0 ? 1 : -1));
+      if (state.timer) {
+        window.clearInterval(state.timer);
+        state.timer = window.setInterval(state.tick, secondsPerCard * 1000);
       }
-      state.raf = requestAnimationFrame(tick);
+    };
+
+    container.addEventListener('touchstart', state.onTouchStart, { passive: true });
+    container.addEventListener('touchend', state.onTouchEnd, { passive: true });
+    container.addEventListener('touchcancel', state.onTouchEnd, { passive: true });
+
+    if (typeof IntersectionObserver !== 'undefined') {
+      state.io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          inView = entry.isIntersecting;
+          if (entry.isIntersecting) {
+            index = showCard(container, index);
+          }
+        });
+      }, { threshold: 0.15 });
+      state.io.observe(container);
     }
 
-    applyOffset();
-    state.raf = requestAnimationFrame(tick);
-    runningLoops.set(container, state);
+    carousels.set(container, state);
   }
 
   function syncFeatureBarLoop() {
@@ -96,79 +182,72 @@
     });
   }
 
-  function syncAllMobileLoops() {
-    document.querySelectorAll('.mobile-slideshow').forEach((el) => {
-      if (shouldRunSlideshow()) startJsLoop(el);
-    });
-    syncFeatureBarLoop();
-  }
-
-  function revealSlideshowItems(root) {
-    root.querySelectorAll('.reveal').forEach((el) => {
-      el.classList.add('is-visible');
-      el.classList.add('is-visible');
-      el.style.setProperty('opacity', '1', 'important');
-      el.style.setProperty('visibility', 'visible', 'important');
-      el.style.setProperty('transform', 'none', 'important');
-    });
-  }
-
   function buildSlideshow(container) {
-    if (container.querySelector('.mobile-slideshow__track')) {
-      revealSlideshowItems(container);
-      startJsLoop(container);
-      return;
+    // Flatten any previous track/group markup into original cards
+    const existing = container.querySelector('.mobile-slideshow__track');
+    if (existing) {
+      const originals = existing.querySelector('.mobile-slideshow__group:not([aria-hidden="true"])')
+        || existing.querySelector('.mobile-slideshow__group');
+      if (originals) {
+        Array.from(originals.children).forEach((item) => container.appendChild(item));
+      } else {
+        Array.from(existing.children).forEach((item) => {
+          if (!item.classList.contains('mobile-slideshow__dots')) {
+            container.appendChild(item);
+          }
+        });
+      }
+      existing.remove();
+      stopCarousel(container);
     }
 
-    const items = Array.from(container.children).filter((el) => !el.classList.contains('mobile-slideshow__track'));
+    const oldDots = container.querySelector('.mobile-slideshow__dots');
+    if (oldDots) oldDots.remove();
+
+    const items = Array.from(container.children).filter(
+      (el) => !el.classList.contains('mobile-slideshow__track')
+        && !el.classList.contains('mobile-slideshow__dots')
+    );
     if (items.length < 2) return;
 
     const track = document.createElement('div');
     track.className = 'mobile-slideshow__track is-js-driven';
-
-    const group1 = document.createElement('div');
-    group1.className = 'mobile-slideshow__group';
-
-    items.forEach((item) => group1.appendChild(item));
-    track.appendChild(group1);
-
-    // Two clones so iOS always has cards on-screen when the loop wraps
-    for (let i = 0; i < 2; i++) {
-      const clone = document.createElement('div');
-      clone.className = 'mobile-slideshow__group';
-      clone.setAttribute('aria-hidden', 'true');
-      items.forEach((item) => clone.appendChild(item.cloneNode(true)));
-      track.appendChild(clone);
-    }
-
+    items.forEach((item) => {
+      item.classList.remove('is-slide-active');
+      track.appendChild(item);
+    });
     container.appendChild(track);
     container.classList.add('is-ready');
-    revealSlideshowItems(container);
-
-    const secondsPerCard = container.classList.contains('process-track')
-      || container.classList.contains('grid-3')
-      || container.classList.contains('values-grid')
-      ? 5
-      : 6;
-    track.style.setProperty('--slideshow-duration', `${Math.max(items.length * secondsPerCard, 20)}s`);
-    startJsLoop(container);
+    forceVisible(container);
+    startCarousel(container);
   }
 
   function destroySlideshow(container) {
-    stopJsLoop(container);
+    stopCarousel(container);
+    const dots = container.querySelector('.mobile-slideshow__dots');
+    if (dots) dots.remove();
+
     const track = container.querySelector('.mobile-slideshow__track');
     if (!track) return;
 
-    const group1 = track.querySelector('.mobile-slideshow__group:not([aria-hidden="true"])')
+    const group = track.querySelector('.mobile-slideshow__group:not([aria-hidden="true"])')
       || track.querySelector('.mobile-slideshow__group');
-    if (!group1) {
-      track.remove();
-      return;
+    if (group) {
+      Array.from(group.children).forEach((item) => {
+        item.classList.remove('is-slide-active');
+        item.removeAttribute('aria-hidden');
+        container.appendChild(item);
+      });
+    } else {
+      Array.from(track.children).forEach((item) => {
+        item.classList.remove('is-slide-active');
+        item.removeAttribute('aria-hidden');
+        container.appendChild(item);
+      });
     }
-
-    Array.from(group1.children).forEach((item) => container.appendChild(item));
     track.remove();
     container.classList.remove('is-ready');
+    container.scrollLeft = 0;
   }
 
   function initMobileSlideshows() {
@@ -235,39 +314,31 @@
     });
   }
 
+  function initHoldToPause() {
+    document.querySelectorAll('.marquee-section, .mobile-slideshow').forEach((el) => {
+      if (el.dataset.holdPauseBound === 'true') return;
+      el.dataset.holdPauseBound = 'true';
+
+      el.addEventListener('touchstart', () => {
+        if (!MOBILE_MQ.matches || REDUCED_MOTION.matches) return;
+        el.classList.add('is-hold-paused');
+      }, { passive: true });
+
+      el.addEventListener('touchend', () => {
+        el.classList.remove('is-hold-paused');
+      }, { passive: true });
+
+      el.addEventListener('touchcancel', () => {
+        el.classList.remove('is-hold-paused');
+      }, { passive: true });
+    });
+  }
+
   function boot() {
     initFooterAccordion();
     initMobileSlideshows();
     initHoldToPause();
     syncFeatureBarLoop();
-  }
-
-  /**
-   * Press-and-hold to pause auto-scroll (mobile only).
-   * Touch down → pause at current frame; lift → resume (no restart).
-   */
-  function initHoldToPause() {
-    const targets = document.querySelectorAll(
-      '.marquee-section, .mobile-slideshow'
-    );
-
-    targets.forEach((el) => {
-      if (el.dataset.holdPauseBound === 'true') return;
-      el.dataset.holdPauseBound = 'true';
-
-      const pause = () => {
-        if (!MOBILE_MQ.matches || REDUCED_MOTION.matches) return;
-        el.classList.add('is-hold-paused');
-      };
-
-      const resume = () => {
-        el.classList.remove('is-hold-paused');
-      };
-
-      el.addEventListener('touchstart', pause, { passive: true });
-      el.addEventListener('touchend', resume, { passive: true });
-      el.addEventListener('touchcancel', resume, { passive: true });
-    });
   }
 
   if (document.readyState === 'loading') {
@@ -298,8 +369,12 @@
   window.addEventListener('load', () => {
     if (shouldRunSlideshow()) {
       document.querySelectorAll('.mobile-slideshow').forEach((el) => {
-        if (el.querySelector('.mobile-slideshow__track') && !runningLoops.get(el)) {
-          startJsLoop(el);
+        forceVisible(el);
+        if (el.querySelector('.mobile-slideshow__track') && !carousels.get(el)) {
+          startCarousel(el);
+        } else if (el.querySelector('.mobile-slideshow__track')) {
+          const state = carousels.get(el);
+          if (state) showCard(el, 0);
         }
       });
     }

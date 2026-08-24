@@ -566,6 +566,7 @@
     display: none;
   }
 
+  /* iOS-safe: one card visible at a time (fade). No scroll/transform loops. */
   #solutions .grid-3.mobile-slideshow,
   .process-track.mobile-slideshow,
   .values-grid.mobile-slideshow,
@@ -573,32 +574,24 @@
   .mobile-slideshow {
     display: block !important;
     overflow: hidden;
-    margin-inline: -16px;
-    padding: 4px 16px 16px;
+    margin-inline: 0;
+    padding: 4px 0 8px;
     min-width: 0;
-    max-width: 100vw;
-    -webkit-overflow-scrolling: auto;
+    max-width: 100%;
+    scroll-snap-type: none;
     -webkit-transform: none;
     transform: none;
-  }
-
-  .mobile-slideshow::-webkit-scrollbar {
-    display: none;
-    height: 0;
   }
 
   .mobile-slideshow__track {
-    display: flex;
-    flex-wrap: nowrap;
-    width: max-content;
-    -webkit-transform: none;
-    transform: none;
-  }
-
-  /* CSS keyframes only if JS loop is unavailable */
-  .mobile-slideshow__track:not(.is-js-driven) {
-    animation: mobileCardSlideshow var(--slideshow-duration, 36s) linear infinite;
-    -webkit-animation: mobileCardSlideshow var(--slideshow-duration, 36s) linear infinite;
+    position: relative;
+    display: block;
+    width: 100%;
+    margin: 0 !important;
+    -webkit-transform: none !important;
+    transform: none !important;
+    animation: none !important;
+    -webkit-animation: none !important;
   }
 
   .mobile-slideshow__track.is-js-driven {
@@ -606,71 +599,73 @@
     -webkit-animation: none !important;
   }
 
+  /* Legacy group markup (if any) stays flat on screen */
   .mobile-slideshow__group {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-shrink: 0;
-    gap: 14px;
-    padding-right: 14px;
+    display: contents;
   }
 
-  .mobile-slideshow .reveal,
-  .mobile-slideshow .reveal:not(.is-visible),
-  .mobile-slideshow .process-step,
-  .mobile-slideshow .solution-card,
-  .mobile-slideshow .why-item,
-  .mobile-slideshow .value-card {
+  .mobile-slideshow__track > .reveal,
+  .mobile-slideshow__track > .process-step,
+  .mobile-slideshow__track > .solution-card,
+  .mobile-slideshow__track > .why-item,
+  .mobile-slideshow__track > .value-card {
+    width: 100%;
+    max-width: 100%;
+    flex: none !important;
+    box-sizing: border-box;
+    -webkit-transform: none !important;
+    transform: none !important;
+    transition: opacity 0.35s ease;
+  }
+
+  /* Inactive slides: stay in flow off-screen via absolute so height comes from active */
+  .mobile-slideshow__track > :not(.is-slide-active) {
+    position: absolute !important;
+    left: 0;
+    right: 0;
+    top: 0;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .mobile-slideshow__track > .is-slide-active {
+    position: relative !important;
     opacity: 1 !important;
     visibility: visible !important;
-    transform: none !important;
+    pointer-events: auto;
+    z-index: 1;
   }
 
-  @media (hover: hover) {
-    .mobile-slideshow:hover .mobile-slideshow__track:not(.is-js-driven) {
-      animation-play-state: paused;
-      -webkit-animation-play-state: paused;
-    }
+  .mobile-slideshow__dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    margin-top: 14px;
   }
 
-  /* Press-and-hold: freeze card slideshow at current frame */
-  .mobile-slideshow.is-hold-paused .mobile-slideshow__track,
-  #solutions .mobile-slideshow.is-hold-paused .mobile-slideshow__track,
-  .why-grid.mobile-slideshow.is-hold-paused .mobile-slideshow__track,
-  .process-track.mobile-slideshow.is-hold-paused .mobile-slideshow__track {
-    animation-play-state: paused !important;
-    -webkit-animation-play-state: paused !important;
+  .mobile-slideshow__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-border, #d0d0d0);
+    opacity: 0.7;
   }
 
-  @keyframes mobileCardSlideshow {
-    from { transform: translate3d(0, 0, 0); }
-    to { transform: translate3d(calc(-1 * var(--loop-distance, 0px)), 0, 0); }
-  }
-
-  @-webkit-keyframes mobileCardSlideshow {
-    from { -webkit-transform: translate3d(0, 0, 0); }
-    to { -webkit-transform: translate3d(calc(-1 * var(--loop-distance, 0px)), 0, 0); }
+  .mobile-slideshow__dot.is-active {
+    background: var(--color-text, #1a1a1a);
+    opacity: 1;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .mobile-slideshow {
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-
-    .mobile-slideshow::-webkit-scrollbar {
-      display: none;
-    }
-
-    .mobile-slideshow__track {
-      animation: none;
-      overflow-x: auto;
-      width: auto;
-    }
-
-    .mobile-slideshow__group[aria-hidden="true"] {
-      display: none;
+    .mobile-slideshow__track > .reveal,
+    .mobile-slideshow__track > .process-step,
+    .mobile-slideshow__track > .solution-card,
+    .mobile-slideshow__track > .why-item,
+    .mobile-slideshow__track > .value-card {
+      transition: none;
     }
   }
 
@@ -689,12 +684,12 @@
     display: block;
   }
 
-  /* Unified card size — solutions swipe + slideshow cards */
+  /* Unified card size — one-at-a-time fade slideshow */
   #solutions .solution-card,
   .mobile-slideshow .process-step,
   .mobile-slideshow .why-item {
-    flex: 0 0 min(72vw, 248px);
-    scroll-snap-align: center;
+    width: 100%;
+    max-width: 100%;
     min-height: 200px;
     padding: 16px;
     background: var(--color-white);
@@ -705,8 +700,8 @@
   }
 
   .mobile-slideshow .value-card {
-    flex: 0 0 min(72vw, 248px);
-    scroll-snap-align: center;
+    width: 100%;
+    max-width: 100%;
     min-height: 0;
     height: auto;
     padding: 18px 16px;
@@ -1254,13 +1249,15 @@
   #solutions .solution-card,
   .mobile-slideshow .process-step,
   .mobile-slideshow .why-item {
-    flex: 0 0 min(76vw, 228px);
+    width: 100%;
+    max-width: 100%;
     min-height: 188px;
     padding: 14px;
   }
 
   .mobile-slideshow .value-card {
-    flex: 0 0 min(76vw, 228px);
+    width: 100%;
+    max-width: 100%;
     min-height: 0;
     height: auto;
     padding: 16px 14px;
