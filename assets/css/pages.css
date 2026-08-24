@@ -892,3 +892,10 @@
   .values-grid, .logo-grid, .gallery-grid { grid-template-columns: repeat(2, 1fr); }
   .case-study__metrics { flex-direction: column; gap: 16px; }
 }
+
+/* Homepage snapshot stays 6 cards on desktop; mobile carousel uses all 12. */
+@media (min-width: 769px) {
+  #solutions .grid-3.mobile-slideshow > .solution-card:nth-child(n + 7) {
+    display: none;
+  }
+}
