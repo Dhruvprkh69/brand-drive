@@ -63,6 +63,17 @@
     section.classList.toggle('is-animated', animated);
   }
 
+  /** iOS-safe loop: exact half-track width in px (prevents blank gap at loop reset). */
+  function syncMarqueeLoop(track) {
+    if (!track || track.dataset.cloned !== 'true') return;
+    requestAnimationFrame(() => {
+      const half = track.scrollWidth / 2;
+      if (half > 0) {
+        track.style.setProperty('--loop-distance', `${half}px`);
+      }
+    });
+  }
+
   function waitForImages(imgs, timeoutMs) {
     return new Promise((resolve) => {
       let left = imgs.length;
@@ -112,6 +123,8 @@
     if (shouldAnimate) {
       duplicateTrack(track1);
       duplicateTrack(track2);
+      syncMarqueeLoop(track1);
+      syncMarqueeLoop(track2);
     } else {
       stripClones(track1);
       stripClones(track2);
@@ -127,7 +140,11 @@
 
     const imgs = Array.from(document.querySelectorAll('.marquee-section img'));
     const startMotion = () => {
-      if (shouldAnimate) setMarqueeMotion(true);
+      if (shouldAnimate) {
+        syncMarqueeLoop(track1);
+        syncMarqueeLoop(track2);
+        setMarqueeMotion(true);
+      }
     };
 
     const isMobile = window.matchMedia('(max-width: 768px)').matches;

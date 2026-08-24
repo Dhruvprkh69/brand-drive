@@ -16,6 +16,35 @@
     return MOBILE_MQ.matches && !REDUCED_MOTION.matches;
   }
 
+  /** iOS-safe loop: measure first group width in px (avoids -50% subpixel gap). */
+  function syncLoopDistance(track, groupSelector) {
+    if (!track) return;
+    const group = track.querySelector(groupSelector);
+    if (!group) return;
+
+    requestAnimationFrame(() => {
+      const width = group.getBoundingClientRect().width;
+      if (width > 0) {
+        track.style.setProperty('--loop-distance', `${width}px`);
+      }
+    });
+  }
+
+  function syncSlideshowLoop(container) {
+    const track = container.querySelector('.mobile-slideshow__track');
+    syncLoopDistance(track, '.mobile-slideshow__group:not([aria-hidden="true"])');
+  }
+
+  function syncFeatureBarLoop() {
+    const track = document.querySelector('.feature-bar__track');
+    syncLoopDistance(track, '.feature-bar__group:not([aria-hidden="true"])');
+  }
+
+  function syncAllMobileLoops() {
+    document.querySelectorAll('.mobile-slideshow').forEach(syncSlideshowLoop);
+    syncFeatureBarLoop();
+  }
+
   function revealSlideshowItems(root) {
     root.querySelectorAll('.reveal').forEach((el) => {
       el.classList.add('is-visible');
@@ -28,6 +57,7 @@
   function buildSlideshow(container) {
     if (container.querySelector('.mobile-slideshow__track')) {
       revealSlideshowItems(container);
+      syncSlideshowLoop(container);
       return;
     }
 
@@ -59,6 +89,7 @@
       ? 5
       : 6;
     track.style.setProperty('--slideshow-duration', `${Math.max(items.length * secondsPerCard, 20)}s`);
+    syncSlideshowLoop(container);
   }
 
   function destroySlideshow(container) {
@@ -145,6 +176,7 @@
     initFooterAccordion();
     initMobileSlideshows();
     initHoldToPause();
+    syncFeatureBarLoop();
   }
 
   /**
@@ -185,6 +217,7 @@
     setupFooterColumns();
     initMobileSlideshows();
     initHoldToPause();
+    syncFeatureBarLoop();
     if (!MOBILE_MQ.matches) {
       document.querySelectorAll('.is-hold-paused').forEach((el) => el.classList.remove('is-hold-paused'));
     }
@@ -195,6 +228,13 @@
 
   REDUCED_MOTION.addEventListener('change', () => {
     initMobileSlideshows();
+    syncFeatureBarLoop();
     document.querySelectorAll('.is-hold-paused').forEach((el) => el.classList.remove('is-hold-paused'));
+  });
+
+  window.addEventListener('load', syncAllMobileLoops);
+  window.addEventListener('resize', () => {
+    window.clearTimeout(window.__bdLoopSyncTimer);
+    window.__bdLoopSyncTimer = window.setTimeout(syncAllMobileLoops, 150);
   });
 })();

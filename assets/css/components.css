@@ -581,6 +581,9 @@ body.is-nav-open .whatsapp-float {
 
 .marquee-section.is-animated .marquee__track {
   animation: marqueeScroll 40s linear infinite;
+  -webkit-animation: marqueeScroll 40s linear infinite;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .marquee-section.is-animated .marquee__track--reverse {
@@ -621,8 +624,13 @@ body.is-nav-open .whatsapp-float {
 }
 
 @keyframes marqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(calc(-1 * var(--loop-distance, 50%)), 0, 0); }
+}
+
+@-webkit-keyframes marqueeScroll {
+  0% { -webkit-transform: translate3d(0, 0, 0); }
+  100% { -webkit-transform: translate3d(calc(-1 * var(--loop-distance, 50%)), 0, 0); }
 }
 
 @media (prefers-reduced-motion: reduce) {

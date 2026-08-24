@@ -377,7 +377,11 @@
     display: flex !important;
     width: max-content !important;
     animation: featureBarScroll 32s linear infinite !important;
-    transform: none;
+    -webkit-animation: featureBarScroll 32s linear infinite !important;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .feature-bar__group {
@@ -412,7 +416,18 @@
   @media (prefers-reduced-motion: reduce) {
     .feature-bar__track {
       animation: none !important;
+      -webkit-animation: none !important;
     }
+  }
+
+  @keyframes featureBarScroll {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(calc(-1 * var(--loop-distance, 50%)), 0, 0); }
+  }
+
+  @-webkit-keyframes featureBarScroll {
+    from { -webkit-transform: translate3d(0, 0, 0); }
+    to { -webkit-transform: translate3d(calc(-1 * var(--loop-distance, 50%)), 0, 0); }
   }
 
   /* ── Marquee — restore horizontal logo slideshow on phone ── */
@@ -457,6 +472,9 @@
 
   .marquee-section.is-animated .marquee__track {
     animation: marqueeScroll 36s linear infinite;
+    -webkit-animation: marqueeScroll 36s linear infinite;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .marquee-section.is-animated .marquee__track--reverse {
@@ -569,11 +587,14 @@
     will-change: transform;
     animation: mobileCardSlideshow var(--slideshow-duration, 36s) linear infinite;
     -webkit-animation: mobileCardSlideshow var(--slideshow-duration, 36s) linear infinite;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .mobile-slideshow__group {
     display: flex;
     flex-wrap: nowrap;
+    flex-shrink: 0;
     gap: 14px;
     padding-right: 14px;
   }
@@ -607,7 +628,12 @@
 
   @keyframes mobileCardSlideshow {
     from { transform: translate3d(0, 0, 0); }
-    to { transform: translate3d(-50%, 0, 0); }
+    to { transform: translate3d(calc(-1 * var(--loop-distance, 50%)), 0, 0); }
+  }
+
+  @-webkit-keyframes mobileCardSlideshow {
+    from { -webkit-transform: translate3d(0, 0, 0); }
+    to { -webkit-transform: translate3d(calc(-1 * var(--loop-distance, 50%)), 0, 0); }
   }
 
   @media (prefers-reduced-motion: reduce) {
