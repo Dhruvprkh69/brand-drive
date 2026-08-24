@@ -26,9 +26,14 @@
     }
   }
 
+  function groupLoopWidth(group) {
+    if (!group) return 0;
+    return Math.round(group.getBoundingClientRect().width);
+  }
+
   /**
-   * iOS Safari cannot loop CSS translate(-50%) on max-content tracks —
-   * the layer drops and the strip goes blank. Pixel rAF wrap is reliable.
+   * iOS: CSS/transform loops unpaint the strip after one cycle.
+   * Native scrollLeft wrap does not use a compositor layer, so it stays visible.
    */
   function startJsLoop(container) {
     stopJsLoop(container);
@@ -39,28 +44,28 @@
     track.classList.add('is-js-driven');
     track.style.animation = 'none';
     track.style.webkitAnimation = 'none';
+    track.style.transform = 'none';
+    track.style.webkitTransform = 'none';
 
     const durationSec = parseFloat(track.style.getPropertyValue('--slideshow-duration'))
       || parseFloat(getComputedStyle(track).getPropertyValue('--slideshow-duration'))
       || 36;
 
-    let x = 0;
     let last = 0;
     const state = { raf: 0 };
 
     function tick(now) {
       if (!last) last = now;
-      const dt = Math.min(now - last, 48);
+      const dt = Math.min(now - last, 40);
       last = now;
 
       if (!container.classList.contains('is-hold-paused') && !document.hidden) {
-        const w = group.offsetWidth;
+        const w = groupLoopWidth(group);
         if (w > 1) {
-          x += (w / (durationSec * 1000)) * dt;
-          while (x >= w) x -= w;
-          const tx = 'translate3d(' + (-x).toFixed(2) + 'px,0,0)';
-          track.style.webkitTransform = tx;
-          track.style.transform = tx;
+          container.scrollLeft += (w / (durationSec * 1000)) * dt;
+          if (container.scrollLeft >= w) {
+            container.scrollLeft -= w;
+          }
         }
       } else {
         last = now;
@@ -282,9 +287,14 @@
     document.querySelectorAll('.is-hold-paused').forEach((el) => el.classList.remove('is-hold-paused'));
   });
 
-  window.addEventListener('load', syncAllMobileLoops);
-  window.addEventListener('resize', () => {
-    window.clearTimeout(window.__bdLoopSyncTimer);
-    window.__bdLoopSyncTimer = window.setTimeout(syncAllMobileLoops, 150);
+  window.addEventListener('load', () => {
+    if (shouldRunSlideshow()) {
+      document.querySelectorAll('.mobile-slideshow').forEach((el) => {
+        if (el.querySelector('.mobile-slideshow__track') && !runningLoops.get(el)) {
+          startJsLoop(el);
+        }
+      });
+    }
+    syncFeatureBarLoop();
   });
 })();
