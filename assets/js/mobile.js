@@ -16,32 +16,78 @@
     return MOBILE_MQ.matches && !REDUCED_MOTION.matches;
   }
 
-  /** iOS-safe loop: measure first group width in px (avoids -50% subpixel gap). */
-  function syncLoopDistance(track, groupSelector) {
-    if (!track) return;
-    const group = track.querySelector(groupSelector);
-    if (!group) return;
+  const runningLoops = new WeakMap();
 
-    requestAnimationFrame(() => {
-      const width = group.getBoundingClientRect().width;
-      if (width > 0) {
-        track.style.setProperty('--loop-distance', `${width}px`);
-      }
-    });
+  function stopJsLoop(container) {
+    const handle = runningLoops.get(container);
+    if (handle) {
+      cancelAnimationFrame(handle.raf);
+      runningLoops.delete(container);
+    }
   }
 
-  function syncSlideshowLoop(container) {
+  /**
+   * iOS Safari cannot loop CSS translate(-50%) on max-content tracks —
+   * the layer drops and the strip goes blank. Pixel rAF wrap is reliable.
+   */
+  function startJsLoop(container) {
+    stopJsLoop(container);
     const track = container.querySelector('.mobile-slideshow__track');
-    syncLoopDistance(track, '.mobile-slideshow__group:not([aria-hidden="true"])');
+    const group = track && track.querySelector('.mobile-slideshow__group');
+    if (!track || !group) return;
+
+    track.classList.add('is-js-driven');
+    track.style.animation = 'none';
+    track.style.webkitAnimation = 'none';
+
+    const durationSec = parseFloat(track.style.getPropertyValue('--slideshow-duration'))
+      || parseFloat(getComputedStyle(track).getPropertyValue('--slideshow-duration'))
+      || 36;
+
+    let x = 0;
+    let last = 0;
+    const state = { raf: 0 };
+
+    function tick(now) {
+      if (!last) last = now;
+      const dt = Math.min(now - last, 48);
+      last = now;
+
+      if (!container.classList.contains('is-hold-paused') && !document.hidden) {
+        const w = group.offsetWidth;
+        if (w > 1) {
+          x += (w / (durationSec * 1000)) * dt;
+          while (x >= w) x -= w;
+          const tx = 'translate3d(' + (-x).toFixed(2) + 'px,0,0)';
+          track.style.webkitTransform = tx;
+          track.style.transform = tx;
+        }
+      } else {
+        last = now;
+      }
+      state.raf = requestAnimationFrame(tick);
+    }
+
+    state.raf = requestAnimationFrame(tick);
+    runningLoops.set(container, state);
   }
 
   function syncFeatureBarLoop() {
     const track = document.querySelector('.feature-bar__track');
-    syncLoopDistance(track, '.feature-bar__group:not([aria-hidden="true"])');
+    if (!track) return;
+    const group = track.querySelector('.feature-bar__group:not([aria-hidden="true"])')
+      || track.querySelector('.feature-bar__group');
+    if (!group) return;
+    requestAnimationFrame(() => {
+      const width = group.getBoundingClientRect().width;
+      if (width > 0) track.style.setProperty('--loop-distance', width + 'px');
+    });
   }
 
   function syncAllMobileLoops() {
-    document.querySelectorAll('.mobile-slideshow').forEach(syncSlideshowLoop);
+    document.querySelectorAll('.mobile-slideshow').forEach((el) => {
+      if (shouldRunSlideshow()) startJsLoop(el);
+    });
     syncFeatureBarLoop();
   }
 
@@ -57,7 +103,7 @@
   function buildSlideshow(container) {
     if (container.querySelector('.mobile-slideshow__track')) {
       revealSlideshowItems(container);
-      syncSlideshowLoop(container);
+      startJsLoop(container);
       return;
     }
 
@@ -65,20 +111,23 @@
     if (items.length < 2) return;
 
     const track = document.createElement('div');
-    track.className = 'mobile-slideshow__track';
+    track.className = 'mobile-slideshow__track is-js-driven';
 
     const group1 = document.createElement('div');
     group1.className = 'mobile-slideshow__group';
 
-    const group2 = document.createElement('div');
-    group2.className = 'mobile-slideshow__group';
-    group2.setAttribute('aria-hidden', 'true');
-
     items.forEach((item) => group1.appendChild(item));
-    items.forEach((item) => group2.appendChild(item.cloneNode(true)));
-
     track.appendChild(group1);
-    track.appendChild(group2);
+
+    // Two clones so iOS always has cards on-screen when the loop wraps
+    for (let i = 0; i < 2; i++) {
+      const clone = document.createElement('div');
+      clone.className = 'mobile-slideshow__group';
+      clone.setAttribute('aria-hidden', 'true');
+      items.forEach((item) => clone.appendChild(item.cloneNode(true)));
+      track.appendChild(clone);
+    }
+
     container.appendChild(track);
     container.classList.add('is-ready');
     revealSlideshowItems(container);
@@ -89,10 +138,11 @@
       ? 5
       : 6;
     track.style.setProperty('--slideshow-duration', `${Math.max(items.length * secondsPerCard, 20)}s`);
-    syncSlideshowLoop(container);
+    startJsLoop(container);
   }
 
   function destroySlideshow(container) {
+    stopJsLoop(container);
     const track = container.querySelector('.mobile-slideshow__track');
     if (!track) return;
 
@@ -185,7 +235,7 @@
    */
   function initHoldToPause() {
     const targets = document.querySelectorAll(
-      '.marquee-section, .mobile-slideshow, #solutions .mobile-slideshow, .why-grid.mobile-slideshow, .process-track.mobile-slideshow'
+      '.marquee-section, .mobile-slideshow'
     );
 
     targets.forEach((el) => {

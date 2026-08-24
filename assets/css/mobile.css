@@ -566,29 +566,38 @@
     display: none;
   }
 
-  #solutions .grid-3.mobile-slideshow {
-    display: block;
-    overflow: hidden;
-    scroll-snap-type: none;
-    margin-inline: -16px;
-    padding: 4px 16px 16px;
-  }
-
+  #solutions .grid-3.mobile-slideshow,
+  .process-track.mobile-slideshow,
+  .values-grid.mobile-slideshow,
+  .why-grid.mobile-slideshow,
   .mobile-slideshow {
-    display: block;
+    display: block !important;
     overflow: hidden;
     margin-inline: -16px;
     padding: 4px 16px 16px;
+    min-width: 0;
+    max-width: 100vw;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
   }
 
   .mobile-slideshow__track {
     display: flex;
+    flex-wrap: nowrap;
     width: max-content;
-    will-change: transform;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* CSS keyframes only if JS loop is unavailable */
+  .mobile-slideshow__track:not(.is-js-driven) {
     animation: mobileCardSlideshow var(--slideshow-duration, 36s) linear infinite;
     -webkit-animation: mobileCardSlideshow var(--slideshow-duration, 36s) linear infinite;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+  }
+
+  .mobile-slideshow__track.is-js-driven {
+    animation: none !important;
+    -webkit-animation: none !important;
   }
 
   .mobile-slideshow__group {
@@ -611,7 +620,7 @@
   }
 
   @media (hover: hover) {
-    .mobile-slideshow:hover .mobile-slideshow__track {
+    .mobile-slideshow:hover .mobile-slideshow__track:not(.is-js-driven) {
       animation-play-state: paused;
       -webkit-animation-play-state: paused;
     }
@@ -628,12 +637,12 @@
 
   @keyframes mobileCardSlideshow {
     from { transform: translate3d(0, 0, 0); }
-    to { transform: translate3d(calc(-1 * var(--loop-distance, 50%)), 0, 0); }
+    to { transform: translate3d(calc(-1 * var(--loop-distance, 0px)), 0, 0); }
   }
 
   @-webkit-keyframes mobileCardSlideshow {
     from { -webkit-transform: translate3d(0, 0, 0); }
-    to { -webkit-transform: translate3d(calc(-1 * var(--loop-distance, 50%)), 0, 0); }
+    to { -webkit-transform: translate3d(calc(-1 * var(--loop-distance, 0px)), 0, 0); }
   }
 
   @media (prefers-reduced-motion: reduce) {
