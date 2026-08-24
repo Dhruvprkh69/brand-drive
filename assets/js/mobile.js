@@ -26,33 +26,34 @@
     }
   }
 
-  function groupLoopWidth(group) {
-    if (!group) return 0;
-    return Math.round(group.getBoundingClientRect().width);
+  function groupWidth(group) {
+    return group ? Math.round(group.offsetWidth) : 0;
   }
 
   /**
-   * iOS: CSS/transform loops unpaint the strip after one cycle.
-   * Native scrollLeft wrap does not use a compositor layer, so it stays visible.
+   * iOS Safari unpaints overflow/transform layers when scrollLeft or
+   * translateX wraps. Move the leading group to the end instead (tape loop).
    */
   function startJsLoop(container) {
     stopJsLoop(container);
     const track = container.querySelector('.mobile-slideshow__track');
-    const group = track && track.querySelector('.mobile-slideshow__group');
-    if (!track || !group) return;
+    if (!track || track.children.length < 2) return;
 
+    container.scrollLeft = 0;
     track.classList.add('is-js-driven');
-    track.style.animation = 'none';
-    track.style.webkitAnimation = 'none';
-    track.style.transform = 'none';
-    track.style.webkitTransform = 'none';
+    track.style.cssText += 'animation:none;-webkit-animation:none;transform:none;-webkit-transform:none;margin-left:0;';
 
     const durationSec = parseFloat(track.style.getPropertyValue('--slideshow-duration'))
       || parseFloat(getComputedStyle(track).getPropertyValue('--slideshow-duration'))
       || 36;
 
+    let offset = 0;
     let last = 0;
     const state = { raf: 0 };
+
+    function applyOffset() {
+      track.style.marginLeft = -offset + 'px';
+    }
 
     function tick(now) {
       if (!last) last = now;
@@ -60,12 +61,17 @@
       last = now;
 
       if (!container.classList.contains('is-hold-paused') && !document.hidden) {
-        const w = groupLoopWidth(group);
+        const first = track.firstElementChild;
+        const w = groupWidth(first);
         if (w > 1) {
-          container.scrollLeft += (w / (durationSec * 1000)) * dt;
-          if (container.scrollLeft >= w) {
-            container.scrollLeft -= w;
+          offset += (w / (durationSec * 1000)) * dt;
+          while (track.children.length > 1 && offset >= groupWidth(track.firstElementChild)) {
+            const node = track.firstElementChild;
+            const nodeW = groupWidth(node);
+            track.appendChild(node);
+            offset -= nodeW;
           }
+          applyOffset();
         }
       } else {
         last = now;
@@ -73,6 +79,7 @@
       state.raf = requestAnimationFrame(tick);
     }
 
+    applyOffset();
     state.raf = requestAnimationFrame(tick);
     runningLoops.set(container, state);
   }
@@ -99,9 +106,10 @@
   function revealSlideshowItems(root) {
     root.querySelectorAll('.reveal').forEach((el) => {
       el.classList.add('is-visible');
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-      el.style.visibility = 'visible';
+      el.classList.add('is-visible');
+      el.style.setProperty('opacity', '1', 'important');
+      el.style.setProperty('visibility', 'visible', 'important');
+      el.style.setProperty('transform', 'none', 'important');
     });
   }
 

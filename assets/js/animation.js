@@ -65,7 +65,10 @@
     /* Stagger groups — single animation per grid */
     document.querySelectorAll('.grid-3, .why-grid, .process-track, .values-grid').forEach((grid) => {
       if (grid.classList.contains('mobile-slideshow') && window.matchMedia('(max-width: 768px)').matches) {
-        grid.querySelectorAll('.reveal, ' + STAGGER_SELECTORS).forEach(markVisible);
+        grid.querySelectorAll('.reveal, ' + STAGGER_SELECTORS).forEach((el) => {
+          if (typeof gsap !== 'undefined') gsap.killTweensOf(el);
+          markVisible(el);
+        });
         return;
       }
       const items = grid.querySelectorAll(STAGGER_SELECTORS);
