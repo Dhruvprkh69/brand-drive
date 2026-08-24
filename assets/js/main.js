@@ -89,12 +89,12 @@
       waitForImage(loaderLogo, 4500),
       waitForImage(document.querySelector('.logo-brand--header'), 4500),
       waitForImage(document.querySelector('.hero__bg img'), 4500),
-      preloadUrl('assets/images/brands/brand-1.png', 4500),
-      preloadUrl('assets/images/brands/brand-2.png', 4500),
-      preloadUrl('assets/images/brands/brand-3.png', 4500),
-      preloadUrl('assets/images/brands/brand-4.png', 4500),
-      preloadUrl('assets/images/brands/brand-5.png', 4500),
-      preloadUrl('assets/images/brands/brand-6.png', 4500),
+      preloadUrl('assets/images/brands/brand-1.webp', 4500),
+      preloadUrl('assets/images/brands/brand-2.webp', 4500),
+      preloadUrl('assets/images/brands/brand-3.webp', 4500),
+      preloadUrl('assets/images/brands/brand-4.webp', 4500),
+      preloadUrl('assets/images/brands/brand-5.webp', 4500),
+      preloadUrl('assets/images/brands/brand-6.webp', 4500),
     ];
 
     const pageLoad = new Promise((r) => {
