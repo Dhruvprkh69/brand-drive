@@ -2,7 +2,7 @@
 
 Use this guide to connect the website contact form (`contact.html` and Home `#contact` section) to a Google Sheet so every submission is saved automatically.
 
-**Website file to update after setup:** `assets/js/main.js` (line 8)
+**Website file for Web App URL:** `assets/js/main.js` (line 8)
 
 The form sends these fields:
 
@@ -12,8 +12,11 @@ The form sends these fields:
 | Email Address | Email |
 | Phone Number | Phone |
 | Subject | Subject |
-| Your Message | Message |
+| Budget | Budget |
+| Your Message | Message (optional) |
 | Send Message | (button only — not a column) |
+
+Budget options: **5L–15L**, **15L–30L**, **30L–50L**, **50L+**
 
 After submit, the website shows: **"Thank you! Your message has been sent. We'll reach you within 24 hours."**
 
@@ -26,9 +29,11 @@ After submit, the website shows: **"Thank you! Your message has been sent. We'll
 3. Name it: `Brand Drive Contact Form`
 4. In **Row 1**, add these column headers:
 
-| A | B | C | D | E | F |
-|---|---|---|---|---|---|
-| **Timestamp** | **Name** | **Email** | **Phone** | **Subject** | **Message** |
+| A | B | C | D | E | F | G |
+|---|---|---|---|---|---|---|
+| **Timestamp** | **Name** | **Email** | **Phone** | **Subject** | **Budget** | **Message** |
+
+If the sheet already exists, insert a **Budget** column (column F) and shift Message to column G.
 
 5. The sheet saves automatically
 
@@ -50,6 +55,7 @@ function doPost(e) {
     data.email || '',
     data.phone || '',
     data.subject || '',
+    data.budget || '',
     data.message || ''
   ]);
 
@@ -81,45 +87,39 @@ https://script.google.com/macros/s/AKfycbx.........../exec
 
 > **Important:** Each new deployment gets a new URL. Always use the latest URL after redeploying.
 
-If you already deployed an older script (without Subject), paste the new script, then **Deploy → Manage deployments → Edit (pencil) → New version → Deploy**, and copy the URL again.
+If you already deployed an older script, paste the updated script (with `data.budget`), then **Deploy → Manage deployments → Edit (pencil) → New version → Deploy**. Keep the same URL if Google allows, or paste the new URL into `main.js`.
 
 ---
 
 ## Part 4: Connect to the Website
 
 1. Open: `brand-drive/assets/js/main.js`
-2. Find line 8:
+2. Find line 8 and set:
 
 ```javascript
-const GOOGLE_SCRIPT_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_ID/exec';
 ```
 
-3. Replace with your copied URL, for example:
-
-```javascript
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx.../exec';
-```
-
-4. Save the file, then push to GitHub:
+3. Save, commit, and push:
 
 ```powershell
 cd "c:\Users\dhruv\OneDrive\Desktop\Portfolio Web\brand-drive"
 
-git add assets/js/main.js
-git commit -m "Connect contact form to Google Sheets"
+git add assets/js/main.js index.html contact.html CONTACT-FORM-SETUP-GUIDE.md
+git commit -m "Add budget dropdown to contact form"
 git push origin main
 ```
 
-5. Wait 1–2 minutes for GitHub Pages to update, then test the live site
+4. Wait 1–2 minutes for GitHub Pages to update, then test the live site
 
 ---
 
 ## Part 5: Test the Form
 
 1. Open: [https://dhruvprkh69.github.io/brand-drive/contact.html](https://dhruvprkh69.github.io/brand-drive/contact.html)
-2. Fill **Name, Email Address, Phone Number, Subject, Your Message** and click **Send Message**
+2. Fill **Name, Email, Phone, Subject, Budget, Message** and click **Send Message**
 3. You should see: *"Thank you! Your message has been sent. We'll reach you within 24 hours."*
-4. Check your Google Sheet — a new row should appear with Timestamp, Name, Email, Phone, Subject, Message
+4. Check your Google Sheet — new row with Timestamp, Name, Email, Phone, Subject, Budget, Message
 
 **Where the form works:**
 - Contact page (`contact.html`)
@@ -133,9 +133,10 @@ git push origin main
 |-------|----------|------------------|
 | Full Name | Yes | `name` → **Name** |
 | Email Address | Yes | `email` → **Email** |
-| Phone Number | No | `phone` → **Phone** |
+| Phone Number | Yes (10 digits) | `phone` → **Phone** |
 | Subject | Yes | `subject` → **Subject** |
-| Your Message | Yes | `message` → **Message** |
+| Budget | Yes | `budget` → **Budget** |
+| Your Message | No | `message` → **Message** |
 | Send Message | — | Submit button only |
 
 ---
@@ -146,7 +147,7 @@ git push origin main
 |---------|-----|
 | "Form not configured — add your Google Script URL in main.js" | URL not pasted in `main.js`, or changes not pushed to GitHub |
 | Form submits but no row in Sheet | Redeploy Web App with **Who has access: Anyone**; copy the new URL |
-| Subject column empty | Update Apps Script to include `data.subject`, add a **Subject** header in column E, then **redeploy** |
+| Budget column empty | Update Apps Script to include `data.budget`, add **Budget** header in column F, then **redeploy** |
 | Permission / authorization error | Run the script once in Apps Script editor and click **Allow** |
 | Old submissions missing | Check you are looking at the correct Google Sheet / tab |
 
@@ -165,6 +166,7 @@ MailApp.sendEmail({
     '\nEmail: ' + (data.email || '') +
     '\nPhone: ' + (data.phone || '') +
     '\nSubject: ' + (data.subject || '') +
+    '\nBudget: ' + (data.budget || '') +
     '\n\n' + (data.message || '')
 });
 ```
@@ -175,14 +177,13 @@ Replace the email address with the one you want to receive alerts on. Save and *
 
 ## Quick Checklist
 
-- [ ] Google Sheet created with 6 column headers (Timestamp, Name, Email, Phone, Subject, Message)
-- [ ] Apps Script pasted and saved (includes `data.subject`)
+- [ ] Google Sheet headers: Timestamp, Name, Email, Phone, Subject, Budget, Message
+- [ ] Apps Script includes `data.budget` and is saved
 - [ ] Script authorized (Run once → Allow)
-- [ ] Web App deployed — **Anyone** can access
-- [ ] Web app URL copied
-- [ ] URL pasted in `assets/js/main.js` line 8
-- [ ] Changes committed and pushed to GitHub
-- [ ] Live form tested — row appears in Sheet, success text shows 24 hours
+- [ ] Web App redeployed — **Anyone** can access
+- [ ] Web app URL in `assets/js/main.js`
+- [ ] Changes pushed to GitHub
+- [ ] Live form tested — Budget appears in Sheet
 
 ---
 

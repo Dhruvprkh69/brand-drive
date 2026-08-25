@@ -448,6 +448,96 @@
     contactStatus.className = 'form-status' + (type ? ` form-status--${type}` : '');
   }
 
+  function clearFieldErrors() {
+    if (!contactForm) return;
+    contactForm.querySelectorAll('.form-group.is-invalid').forEach((group) => {
+      group.classList.remove('is-invalid');
+    });
+    contactForm.querySelectorAll('.form-field-error').forEach((el) => el.remove());
+  }
+
+  function showFieldError(field, message) {
+    const group = field.closest('.form-group');
+    if (!group) return;
+    group.classList.add('is-invalid');
+    let err = group.querySelector('.form-field-error');
+    if (!err) {
+      err = document.createElement('span');
+      err.className = 'form-field-error';
+      group.appendChild(err);
+    }
+    err.textContent = message;
+  }
+
+  function digitsOnly(value) {
+    return String(value || '').replace(/\D/g, '');
+  }
+
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  function validateContactForm() {
+    clearFieldErrors();
+    setStatus('', '');
+
+    const nameEl = contactForm.querySelector('#name');
+    const emailEl = contactForm.querySelector('#email');
+    const phoneEl = contactForm.querySelector('#phone');
+    const subjectEl = contactForm.querySelector('#subject');
+    const budgetEl = contactForm.querySelector('#budget');
+    const messageEl = contactForm.querySelector('#message');
+
+    const name = (nameEl?.value || '').trim();
+    const email = (emailEl?.value || '').trim();
+    const phone = digitsOnly(phoneEl?.value);
+    const subject = (subjectEl?.value || '').trim();
+    const budget = (budgetEl?.value || '').trim();
+    const message = (messageEl?.value || '').trim();
+
+    let firstInvalid = null;
+
+    if (!name) {
+      showFieldError(nameEl, 'Please fill this field');
+      firstInvalid = firstInvalid || nameEl;
+    }
+
+    if (!email) {
+      showFieldError(emailEl, 'Please fill this field');
+      firstInvalid = firstInvalid || emailEl;
+    } else if (!isValidEmail(email)) {
+      showFieldError(emailEl, 'Please enter a valid email');
+      firstInvalid = firstInvalid || emailEl;
+    }
+
+    if (!phone) {
+      showFieldError(phoneEl, 'Please fill this field');
+      firstInvalid = firstInvalid || phoneEl;
+    } else if (phone.length !== 10) {
+      showFieldError(phoneEl, 'Phone number must be 10 digits');
+      firstInvalid = firstInvalid || phoneEl;
+    }
+
+    if (!subject) {
+      showFieldError(subjectEl, 'Please fill this field');
+      firstInvalid = firstInvalid || subjectEl;
+    }
+
+    if (!budget) {
+      showFieldError(budgetEl, 'Please fill this field');
+      firstInvalid = firstInvalid || budgetEl;
+    }
+
+    if (firstInvalid) {
+      firstInvalid.focus();
+      return null;
+    }
+
+    if (phoneEl) phoneEl.value = phone;
+
+    return { name, email, phone, subject, budget, message };
+  }
+
   function postToGoogleSheet(data) {
     return new Promise((resolve, reject) => {
       const iframe = document.createElement('iframe');
@@ -481,6 +571,24 @@
     });
   }
 
+  contactForm?.addEventListener('input', (e) => {
+    const group = e.target.closest('.form-group');
+    if (!group?.classList.contains('is-invalid')) return;
+    group.classList.remove('is-invalid');
+    group.querySelector('.form-field-error')?.remove();
+  });
+
+  contactForm?.addEventListener('change', (e) => {
+    const group = e.target.closest('.form-group');
+    if (!group?.classList.contains('is-invalid')) return;
+    group.classList.remove('is-invalid');
+    group.querySelector('.form-field-error')?.remove();
+  });
+
+  contactForm?.querySelector('#phone')?.addEventListener('input', (e) => {
+    e.target.value = digitsOnly(e.target.value).slice(0, 10);
+  });
+
   contactForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -492,24 +600,16 @@
     const honeypot = contactForm.querySelector('[name="website"]');
     if (honeypot?.value) return;
 
-    const fd = new FormData(contactForm);
-    const name = (fd.get('name') || '').trim();
-    const email = (fd.get('email') || '').trim();
-    const phone = (fd.get('phone') || '').trim();
-    const subject = (fd.get('subject') || '').trim();
-    let message = (fd.get('message') || '').trim();
-
-    if (!name || !email || !subject || !message) {
-      setStatus('error', 'Please fill in all required fields.');
-      return;
-    }
+    const data = validateContactForm();
+    if (!data) return;
 
     contactSubmit.disabled = true;
     contactSubmit.textContent = 'Sending...';
     setStatus('', '');
 
     try {
-      await postToGoogleSheet({ name, email, phone, subject, message });
+      await postToGoogleSheet(data);
+      clearFieldErrors();
       contactForm.reset();
       setStatus('success', 'Thank you! Your message has been sent. We\'ll reach you within 24 hours.');
     } catch {

@@ -533,8 +533,8 @@
  </div>
 
  <div class="form-group">
- <input type="tel" id="phone" name="phone" placeholder=" " autocomplete="tel">
- <label for="phone">Phone Number</label>
+ <input type="tel" id="phone" name="phone" placeholder=" " required autocomplete="tel" inputmode="numeric" maxlength="10" pattern="[0-9]{10}">
+ <label for="phone">Phone Number *</label>
  </div>
 
  <div class="form-group">
@@ -550,8 +550,19 @@
  </div>
 
  <div class="form-group">
- <textarea id="message" name="message" placeholder=" " required rows="4"></textarea>
- <label for="message">Your Message *</label>
+ <select id="budget" name="budget" required>
+ <option value="" disabled selected hidden></option>
+ <option value="5L-15L">5L &ndash; 15L</option>
+ <option value="15L-30L">15L &ndash; 30L</option>
+ <option value="30L-50L">30L &ndash; 50L</option>
+ <option value="50L+">50L+</option>
+ </select>
+ <label for="budget">Budget *</label>
+ </div>
+
+ <div class="form-group">
+ <textarea id="message" name="message" placeholder=" " rows="4"></textarea>
+ <label for="message">Your Message</label>
  </div>
 
  <button type="submit" class="btn btn--gold btn--magnetic btn--sm contact-form__submit" id="contact-submit">Send Message</button>
