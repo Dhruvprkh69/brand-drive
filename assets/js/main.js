@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  const GOOGLE_SCRIPT_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxtHLxqDsPrgqJcCKkVbOZMHPL0cwarjgnF8zcxx1tZ6qRyEYo_C8RoYmiv4bQBfpgRg/exec';
 
   /* ── Loader ── */
   const loader = document.getElementById('loader');
