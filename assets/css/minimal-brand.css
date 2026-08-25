@@ -260,6 +260,12 @@ body,
   color: var(--color-charcoal);
 }
 
+/* Home page only — Solutions + Why Brand Drive card headings */
+.page-home #solutions .solution-card__title,
+.page-home #process .process-step__title {
+  color: var(--color-blue);
+}
+
 #values .value-card__title {
   color: var(--color-green) !important;
 }
