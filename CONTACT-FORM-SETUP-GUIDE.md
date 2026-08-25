@@ -16,7 +16,7 @@ The form sends these fields:
 | Your Message | Message (optional) |
 | Send Message | (button only — not a column) |
 
-Budget options: **5L–15L**, **15L–30L**, **30L–50L**, **50L+**
+Budget options: **5 Lakhs – 15 Lakhs**, **15 Lakhs – 30 Lakhs**, **30 Lakhs – 50 Lakhs**, **50 Lakhs & above**
 
 After submit, the website shows: **"Thank you! Your message has been sent. We'll reach you within 24 hours."**
 
