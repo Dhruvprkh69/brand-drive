@@ -1113,9 +1113,31 @@
     gap: 24px;
   }
 
-  /* Sharp rectangle — no cream corner gaps from contain + large radius */
+  /* Solutions: full image on phone — no top crop, no empty letterbox */
   .solution-section__visual,
-  .solution-section__visual--contain,
+  .solution-section__visual--contain {
+    border-radius: 0;
+    aspect-ratio: auto;
+    max-height: none;
+    min-height: 0;
+    width: 100%;
+    height: auto;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .solution-section__visual img,
+  .solution-section__visual--contain img {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+    object-position: center top;
+    display: block;
+  }
+
+  /* Industries keep a fixed frame (separate from solutions) */
   .industry-detail__image {
     border-radius: 0;
     aspect-ratio: 16 / 10;
@@ -1126,8 +1148,6 @@
     overflow: hidden;
   }
 
-  .solution-section__visual img,
-  .solution-section__visual--contain img,
   .industry-detail__image img {
     width: 100%;
     height: 100%;

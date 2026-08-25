@@ -499,21 +499,19 @@
     const subject = (fd.get('subject') || '').trim();
     let message = (fd.get('message') || '').trim();
 
-    if (!name || !email || !message) {
+    if (!name || !email || !subject || !message) {
       setStatus('error', 'Please fill in all required fields.');
       return;
     }
-
-    if (subject) message = `Subject: ${subject}\n\n${message}`;
 
     contactSubmit.disabled = true;
     contactSubmit.textContent = 'Sending...';
     setStatus('', '');
 
     try {
-      await postToGoogleSheet({ name, email, phone, message });
+      await postToGoogleSheet({ name, email, phone, subject, message });
       contactForm.reset();
-      setStatus('success', 'Thank you! Your message has been sent. We\'ll get back to you soon.');
+      setStatus('success', 'Thank you! Your message has been sent. We\'ll reach you within 24 hours.');
     } catch {
       setStatus('error', 'Something went wrong. Please try again or WhatsApp us directly.');
     } finally {
