@@ -266,6 +266,11 @@ body,
   color: var(--color-blue);
 }
 
+/* Clients page — Success Metrics card headings */
+.page-clients #success-metrics .why-item__title {
+  color: var(--color-blue);
+}
+
 #values .value-card__title {
   color: var(--color-green) !important;
 }
