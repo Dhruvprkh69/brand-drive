@@ -264,6 +264,35 @@ body,
 .page-home #solutions .solution-card__title,
 .page-home #process .process-step__title {
   color: var(--color-blue);
+  font-weight: 700;
+}
+
+.page-home #solutions .solution-card__title {
+  font-size: calc(1.5rem + 2px);
+}
+
+.page-home #process .process-step__title {
+  font-size: calc(1.35rem + 2px);
+}
+
+@media (min-width: 769px) {
+  .page-home #solutions .solution-card__title {
+    font-size: calc(clamp(1.1rem, 1.5vw, 1.25rem) + 2px);
+  }
+}
+
+@media (max-width: 768px) {
+  .page-home #solutions .solution-card__title,
+  .page-home #process .process-step__title {
+    font-size: calc(1.1rem + 2px);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-home #solutions .solution-card__title,
+  .page-home #process .process-step__title {
+    font-size: calc(1.05rem + 2px);
+  }
 }
 
 /* Clients page — Success Metrics card headings */
