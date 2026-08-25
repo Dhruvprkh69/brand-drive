@@ -644,6 +644,10 @@
   margin-bottom: 10px;
 }
 
+.contact-form-head__title {
+  color: var(--color-blue);
+}
+
 .contact-info__lead .section__subtitle,
 .contact-form-head__subtitle {
   font-size: 0.92rem;
@@ -695,8 +699,8 @@
   flex-shrink: 0;
   display: grid;
   place-items: center;
-  background: rgba(118, 184, 45, 0.12);
-  color: var(--color-green);
+  background: var(--color-blue-muted);
+  color: var(--color-blue);
   border-radius: 50%;
   font-size: 0.9rem;
 }
